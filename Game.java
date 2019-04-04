@@ -34,30 +34,51 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room hall, study, library, bathroom, kitchen, upstairs, basement, dining, lounge, exit;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        hall = new Room("in the main hall.");
+        study = new Room("in the study.");
+        library = new Room("in the library.");
+        bathroom = new Room("in the bathroom.");
+        kitchen = new Room("in the kitchen.");
+        upstairs = new Room("on the landing of the second floor.");
+        basement = new Room("in the basement.");
+        dining = new Room("in the dining room.");
+        lounge = new Room("in the lounge.");
+        exit = new Room("outside.");
         
         // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        hall.setExit("first door on the right", study);
+        hall.setExit("second door on the right", library);
+        hall.setExit("third door on the right", bathroom);
+        hall.setExit("furthest door straight ahead", kitchen);
+        hall.setExit("staircase going up", upstairs);
+        hall.setExit("third door on the left", basement);
+        hall.setExit("second door on the left", dining);
+        hall.setExit("third door on the left", lounge);
+        hall.setExit("front door", exit);
+        
+        study.setExit("to main hall", hall);
+        
+        library.setExit("to main hall", hall);
+        
+        bathroom.setExit("to main hall", hall);
+        
+        kitchen.setExit("to main hall", hall);
+        
+        upstairs.setExit("to main hall", hall);
+        
+        basement.setExit("to main hall", hall);
+        
+        dining.setExit("to main hall", hall);
+        
+        lounge.setExit("to main hall", hall);
+        
+        exit.setExit("front door", hall);
+        
 
-        theater.setExit("west", outside);
-
-        pub.setExit("east", outside);
-
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-
-        office.setExit("west", lab);
-
-        currentRoom = outside;  // start game outside
+        currentRoom = exit;  // start game outside
     }
 
     /**
