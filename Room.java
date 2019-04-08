@@ -131,7 +131,7 @@ public class Room
     /**
      * Add all items in the room to ArrayList
      */
-    private void addItem()
+    public void addItem(String description)
     {
         
     }
