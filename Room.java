@@ -1,6 +1,7 @@
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * Class Room - a room in an adventure game.
@@ -20,6 +21,9 @@ public class Room
 {
     private String name;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    private String lookDescription;
+    private boolean visited;
+    private ArrayList<Item> items;
 
     /**
      * Create a room described "description". Initially, it has
@@ -31,6 +35,8 @@ public class Room
     {
         name = description;
         exits = new HashMap<String, Room>();
+        items = new ArrayList<Item>();
+        visited = false;
     }
 
     /**
@@ -62,6 +68,39 @@ public class Room
     {
         return "You are " + name + ".\n" + getExitString();
     }
+    
+    /**
+     * 
+     */
+    public String getLookDescription()
+    {
+        return null;
+    }
+    
+    /**
+     *  Set a detailed description of the room and
+     *  the items in it.
+     */
+    public void setLookDescription(String description)
+    {
+        lookDescription = description;
+    }
+    
+    /**
+     * 
+     */
+    public void visitRoom()
+    {
+        if(!visited) {
+            // Print out details of room
+            System.out.println(getLookDescription());
+            
+            
+        } else {
+            // give exits and items?
+        }
+        
+    }
 
     /**
      * Return a string describing the room's exits, for example
@@ -70,7 +109,7 @@ public class Room
      */
     private String getExitString()
     {
-        String returnString = "Exits:";
+        String returnString = "Options:";
         Set<String> keys = exits.keySet();
         for(String exit : keys) {
             returnString += " " + exit;
@@ -87,6 +126,14 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+    
+    /**
+     * Add all items in the room to ArrayList
+     */
+    private void addItem()
+    {
+        
     }
 }
 

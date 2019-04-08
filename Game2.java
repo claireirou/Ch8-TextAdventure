@@ -17,19 +17,20 @@ import java.util.Random;
  * @version 2011.08.10
  */
 
-public class Game 
+public class Game2 
 {
     private Parser parser;
     private Room currentRoom;
-    private final int version = new Random().nextInt(3);
+    private String gameTitle;
         
     /**
      * Create the game and initialise its internal map.
      */
-    public Game() 
+    public Game2() 
     {
         createRooms();
         parser = new Parser();
+        gameTitle = "*Game Title Pending*";
     }
 
     /**
@@ -111,7 +112,7 @@ public class Game
     /**
      * Create items and place them in a room
      */
-    public void createItems()
+    private void createItems()
     {
         
     }
@@ -122,16 +123,112 @@ public class Game
     public void play() 
     {            
         printWelcome();
+        wait(2000);
+        System.out.println("~Thank goodness you're here! I've been stuck in this game forever. " +
+                            "\n    I can't figure out how to win. Will you help me?");
+        System.out.println("\nHelp the trapped player? \nyes no");
+        
+        //CommandWord commandWord = parser.getCommand().getCommandWord();
+        boolean wantToQuit = false;
+        boolean done = false;
+        boolean helped = true;
+        int noCounter = 0;
+        int unknownCounter = 0;
+        
+        while (!done) {
+            switch (parser.getCommand().getCommandWord()) {
+                case UNKNOWN:
+                    unknownCounter ++;
+                    switch (unknownCounter) {
+                        case 1:
+                            System.out.println("Trapped Player: Whoa pal, you need to use words the game " +
+                                                "will recognize.\n");
+                            wait(1000);
+                            System.out.println("Help the trapped player? \nyes no");
+                            break;
+                        case 2:
+                            System.out.println("Trapped Player: Buddy, you gotta work with me here. Type yes or no." +
+                                                "\n    But preferably yes.\n");
+                            wait(1000);
+                            System.out.println("Help the trapped player? \nyes no");
+                            break;
+                        case 3:
+                            System.out.println("Trapped Player: Now come on, just type y e s, you can do it!");
+                            wait(2000);
+                            System.out.println("Help the trapped player? \nyes no");
+                            break;
+                        case 4:
+                            System.out.println("Trapped Player: You know what buddy, don't worry about it." +
+                                            "\n    I got you.\n");
+                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.print("> ");
+                            wait(1000);
+                            System.out.print("y");
+                            wait(500);
+                            System.out.print("e");
+                            wait(500);
+                            System.out.print("s");
+                            done = true;
+                            break;
+                    }
+                    break;
+                    
+                case YES:
+                    System.out.println("Trapped Player: Awesome! Thank you so much. Let's go!");
+                    done = true;
+                    break;
+                    
+                case NO:
+                    noCounter++;
+                    switch (noCounter) {
+                        case 1:
+                            System.out.println("Trapped Player: Wait man, are you sure? I could " +
+                                                "really use a hand.\n");
+                            wait(2000);
+                            System.out.print("P"); wait(200); System.out.print("l"); wait(200);
+                            System.out.print("e"); wait(200); System.out.print("a"); wait(200);
+                            System.out.print("s"); wait(200); System.out.print("e ");
+                            System.out.print("Help the trapped player? \nyes no");
+                            break;
+                        case 2:
+                            System.out.println("Trapped Player: Can I say something to change your mind?\n");
+                            wait(2000);
+                            System.out.print("P"); wait(200); System.out.print("r"); wait(200);
+                            System.out.print("e"); wait(200); System.out.print("t"); wait(200);
+                            System.out.print("t"); wait(200); System.out.print("y "); wait(200);
+                            System.out.print("p"); wait(200); System.out.print("l"); wait(200);
+                            System.out.print("e"); wait(200); System.out.print("a"); wait(200);
+                            System.out.print("s"); wait(200); System.out.print("e "); 
+                            System.out.println("Help the trapped player? \nyes no");
+                            break;
+                        case 3:
+                            System.out.println("Trapped Player: Oh, alright. Well that's cool, I guess. Maybe I'll " +
+                                            "see you later. \n    Thanks anyway.");
+                            done = true;
+                            helped = false;
+                            break;
+                    }
+                    break;
+                    
+                case QUIT:
+                    System.out.println("Trapped Player: Already? Okay, I guess I'll figure it out on my own.");
+                    done = true;
+                    break;
+            }
+        }
 
+        
+        
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+        /*        
         boolean finished = false;
         while (! finished) {
-            Command command = parser.getCommand();
+            command = parser.getCommand();
             finished = processCommand(command);
         }
         System.out.println("Thank you for playing.  Good bye.");
+        */
     }
 
     /**
@@ -141,10 +238,10 @@ public class Game
     {
         System.out.println();
         System.out.println("Welcome to the *Game Title Pending*");
-        System.out.println("*Game Title Pending* is a new, incredibly unoriginal adventure game.");
+        System.out.println("*Game Title Pending* is a new, incredibly unfinished adventure game.");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
-        System.out.println(currentRoom.getLongDescription());
+        
     }
 
     /**
@@ -208,9 +305,9 @@ public class Game
         
         String direction = null;
         if(!command.hasThirdWord()) {
-             direction = command.getSecondWord();
+            direction = command.getSecondWord();
         } else if(command.hasThirdWord()) {
-             direction = command.getSecondWord() + " " + command.getThirdWord();
+            direction = command.getSecondWord() + " " + command.getThirdWord();
         }
 
         // Try to leave current room.
@@ -239,5 +336,37 @@ public class Game
         else {
             return true;  // signal that we want to quit
         }
+    }
+    
+    /**
+     *  Make the program "wait" for specified amount of time.
+     *  @param amount The amount of time to wait.
+     */
+    private void wait(int amount)
+    {
+        try
+        {
+            Thread.sleep(amount);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
+    
+    /**
+     * Play the game alone.
+     */
+    private void playAlone()
+    {
+        
+    }
+    
+    /**
+     *  Play the game with the trapped player.
+     */
+    private void playTogether()
+    {
+        
     }
 }
