@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class Item
 {
     private boolean found;
-    private boolean portable;
+    private int weight;
     private String name;
     private String details;
     private Room room;
@@ -18,11 +18,11 @@ public class Item
     /**
      * Constructor for objects of class Item
      */
-    public Item(String name, Room room, boolean portable)
+    public Item(String name, Room room, int weight)
     {
         found = false;
         this.name = name;
-        this.portable = portable;
+        this.weight = weight;
         this.room = room;
     }
     
@@ -45,7 +45,7 @@ public class Item
      */
     public boolean addToInventory(String person)
     {
-       if(portable) {
+       if(weight < 50) {
             this.person = person;
             room = null;
             return true;
