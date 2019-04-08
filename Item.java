@@ -13,7 +13,7 @@ public class Item
     private String name;
     private String details;
     private Room room;
-    private Person person;
+    private String person;
     
     /**
      * Constructor for objects of class Item
@@ -43,7 +43,7 @@ public class Item
      *  @return true if item is added and false if item cannont
      *      be added.
      */
-    public boolean addToInventory(Person person)
+    public boolean addToInventory(String person)
     {
        if(portable) {
             this.person = person;

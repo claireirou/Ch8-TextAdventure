@@ -10,14 +10,34 @@ import java.util.Iterator;
 public class Person
 {
     private ArrayList<Item> inventory;
+    private final int inventorySize;
     private String name;
     
     /**
      * Constructor for objects of class Person
+     * @param inventorySize The max size of the person's inventory.
      */
-    public Person()
+    public Person(int inventorySize)
     {
         inventory = new ArrayList<Item>();
+        this.inventorySize = inventorySize;
+    }
+    
+    /**
+     * Add an item to inventory.
+     * @param item The item to add
+     */
+    public void addItem(Item item)
+    {
+        if(inventory.size() <= inventorySize) {
+            if(item.addToInventory(name)) {
+                inventory.add(item);
+            } else {
+                System.out.println("This item cannot be carried.");
+            }
+        } else {
+            System.out.println("You cannot carry anymore items.");
+        }
     }
     
     /**
