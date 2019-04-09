@@ -21,14 +21,18 @@ public class Game2
 {
     private Parser parser;
     private Room currentRoom;
+    private Room previousRoom;
     private String gameTitle;
         
     /**
-     * Create the game and initialise its internal map.
+     * Create the game and initialise its internal map, items
+     * and characters.
      */
     public Game2() 
     {
         createRooms();
+        createItems();
+        createCharacters();
         parser = new Parser();
         gameTitle = "*Game Title Pending*";
     }
@@ -113,6 +117,14 @@ public class Game2
      * Create items and place them in a room
      */
     private void createItems()
+    {
+        
+    }
+    
+    /**
+     *  Create characters and place them in the map
+     */
+    public void createCharacters()
     {
         
     }
@@ -317,6 +329,7 @@ public class Game2
             System.out.println("There is no door!");
         }
         else {
+            previousRoom = currentRoom;
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
         }

@@ -12,15 +12,20 @@ public class Person
     private ArrayList<Item> inventory;
     private final int inventorySize;
     private String name;
+    private Room currentRoom;
+    private Room previousRoom;
     
     /**
      * Constructor for objects of class Person
      * @param inventorySize The max size of the person's inventory.
+     * @param startRoom The room the person starts in.
      */
-    public Person(int inventorySize)
+    public Person(int inventorySize, Room startRoom)
     {
         inventory = new ArrayList<Item>();
         this.inventorySize = inventorySize;
+        currentRoom = startRoom;
+        previousRoom = null;
     }
     
     /**
@@ -51,5 +56,32 @@ public class Person
             inventory.remove(item);
             item.addToRoom(currentRoom);
         }
+    }
+    
+    /**
+     *  Move NPC to new room.
+     *  @param room The room to move the NPC to.
+     */
+    public void setRoom(Room room)
+    {
+        previousRoom = currentRoom;
+        currentRoom = room;
+    }
+    
+    /**
+     * Return the NPC's current room.
+     */
+    public Room getCurrentRoom()
+    {
+        return currentRoom;
+    }
+    
+    /**
+     * Return the NPC's previous room.
+     * Returns null if the NPC hasn't moved.
+     */
+    public Room getPreviousRoom()
+    {
+        return previousRoom;
     }
 }
