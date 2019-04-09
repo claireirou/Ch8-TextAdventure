@@ -23,6 +23,10 @@ public class Game2
     private Room currentRoom;
     private Room previousRoom;
     private String gameTitle;
+    private Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, 
+            kitchen, upstairs, basement, dining, lounge, exit;
+    private Person player,blake;
+    private Item placeholder;
         
     /**
      * Create the game and initialise its internal map, items
@@ -42,9 +46,6 @@ public class Game2
      */
     private void createRooms()
     {
-        Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, 
-        kitchen, upstairs, basement, dining, lounge, exit;
-      
         // create the rooms
         hall = new Room("in the main hall");
         hallRight = new Room("in the main hall");
@@ -68,14 +69,17 @@ public class Game2
         
         hallForward.setExit("right door", kitchen);
         hallForward.setExit("staircase", upstairs);
+        hallForward.setExit("back", hall);
         
         hallLeft.setExit("right door", basement);
         hallLeft.setExit("middle door", dining);
         hallLeft.setExit("left door", lounge);
+        hallLeft.setExit("back", hall);
         
         hallRight.setExit("right door", study);
         hallRight.setExit("middle door", library);
         hallRight.setExit("left door", bathroom);
+        hallRight.setExit("back", hall);
         
         study.setExit("main hall", hall);
         
@@ -109,8 +113,6 @@ public class Game2
         dining.setLookDescription("");
         lounge.setLookDescription("");
         exit.setLookDescription("");
-
-        currentRoom = exit;  // start game outside
     }
     
     /**
@@ -118,15 +120,15 @@ public class Game2
      */
     private void createItems()
     {
-        
+        placeholder = new Item("placeholder", null, 0);
     }
     
     /**
      *  Create characters and place them in the map
      */
-    public void createCharacters()
+    private void createCharacters()
     {
-        
+        player = new Person(5, exit);
     }
 
     /**
@@ -134,6 +136,7 @@ public class Game2
      */
     public void play() 
     {            
+        
         printWelcome();
         wait(2000);
         System.out.println("~Thank goodness you're here! I've been stuck in this game forever. " +

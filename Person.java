@@ -20,11 +20,11 @@ public class Person
      * @param inventorySize The max size of the person's inventory.
      * @param startRoom The room the person starts in.
      */
-    public Person(int inventorySize, Room startRoom)
+    public Person(int inventorySize, Room startingRoom)
     {
         inventory = new ArrayList<Item>();
         this.inventorySize = inventorySize;
-        currentRoom = startRoom;
+        currentRoom = startingRoom;
         previousRoom = null;
     }
     
