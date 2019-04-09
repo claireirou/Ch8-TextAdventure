@@ -61,7 +61,7 @@ public class Room
     /**
      * Return a description of the room in the form:
      *     You are in the kitchen.
-     *     Exits: north west
+     *     Options: north west
      * @return A long description of this room
      */
     public String getLongDescription()
@@ -87,24 +87,17 @@ public class Room
     }
     
     /**
-     * 
+     * Return whether a room has been previously visited by player.
+     * @return true if yes, false if player has never been there.
      */
-    public void visitRoom()
+    public boolean visited()
     {
-        if(!visited) {
-            // Print out details of room
-            System.out.println(getLookDescription());
-            
-            
-        } else {
-            // give exits and items?
-        }
-        
+        return visited;
     }
 
     /**
      * Return a string describing the room's exits, for example
-     * "Exits: north west".
+     * "Options: north west".
      * @return Details of the room's exits.
      */
     private String getExitString()
@@ -134,6 +127,14 @@ public class Room
     public void addItem(String description)
     {
         
+    }
+    
+    /**
+     * Change a room's status to visited
+     */
+    public void visit()
+    {
+        visited = true;
     }
 }
 

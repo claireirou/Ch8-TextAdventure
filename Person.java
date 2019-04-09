@@ -13,6 +13,7 @@ public class Person
     private final int inventorySize;
     private String name;
     private Room currentRoom;
+    private Room nextRoom;
     private Room previousRoom;
     
     /**
@@ -59,6 +60,30 @@ public class Person
     }
     
     /**
+     * Try to go in one direction. If there is an exit, enter the new
+     * room, otherwise print an error message.
+     * @param direction The exit direction for the new room.
+     */
+    public void goRoom(String direction)
+    {
+        nextRoom = currentRoom.getExit(direction);
+        if (nextRoom == null) {
+            System.out.println("You cannot go that way!");
+        }
+        else {
+            previousRoom = currentRoom;
+            currentRoom = nextRoom;
+            nextRoom = null;
+            if(currentRoom.visited()) {
+                System.out.println(currentRoom.getLongDescription());
+            } else {
+                currentRoom.visit();
+                System.out.println(currentRoom.getLookDescription());
+            }
+        }
+    }
+    
+    /**
      *  Move NPC to new room.
      *  @param room The room to move the NPC to.
      */
@@ -69,7 +94,7 @@ public class Person
     }
     
     /**
-     * Return the NPC's current room.
+     * Return the person's current room.
      */
     public Room getCurrentRoom()
     {
@@ -77,11 +102,13 @@ public class Person
     }
     
     /**
-     * Return the NPC's previous room.
+     * Return the person's previous room.
      * Returns null if the NPC hasn't moved.
      */
     public Room getPreviousRoom()
     {
         return previousRoom;
     }
+    
+
 }

@@ -68,7 +68,7 @@ public class Game2
         hall.setExit("front door", exit);
         
         hallForward.setExit("right door", kitchen);
-        hallForward.setExit("staircase", upstairs);
+        hallForward.setExit("upstairs", upstairs);
         hallForward.setExit("back", hall);
         
         hallLeft.setExit("right door", basement);
@@ -136,14 +136,12 @@ public class Game2
      */
     public void play() 
     {            
-        
         printWelcome();
         wait(2000);
         System.out.println("~Thank goodness you're here! I've been stuck in this game forever. " +
                             "\n    I can't figure out how to win. Will you help me?");
         System.out.println("\nHelp the trapped player? \nyes no");
         
-        //CommandWord commandWord = parser.getCommand().getCommandWord();
         boolean wantToQuit = false;
         boolean done = false;
         boolean helped = true;
@@ -203,7 +201,7 @@ public class Game2
                             System.out.print("P"); wait(200); System.out.print("l"); wait(200);
                             System.out.print("e"); wait(200); System.out.print("a"); wait(200);
                             System.out.print("s"); wait(200); System.out.print("e ");
-                            System.out.print("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \nyes no");
                             break;
                         case 2:
                             System.out.println("Trapped Player: Can I say something to change your mind?\n");
@@ -228,10 +226,21 @@ public class Game2
                 case QUIT:
                     System.out.println("Trapped Player: Already? Okay, I guess I'll figure it out on my own.");
                     done = true;
+                    wantToQuit = true;
+                    break;
+                    
+                default:
+                    System.out.println("Trapped Player: You're getting ahead of yourself, there. Before that, " +
+                                        "\n\twill you help me?\n");
+                    System.out.println("Help the trapped player? \nyes no");
                     break;
             }
         }
-
+        
+        while (!wantToQuit) {
+            printWelcome();
+            
+        }
         
         
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -252,9 +261,12 @@ public class Game2
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the *Game Title Pending*");
-        System.out.println("*Game Title Pending* is a new, incredibly unfinished adventure game.");
-        System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
+        System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
+        System.out.println("                           Welcome to the *Game Title Pending*");
+        System.out.println("                                 By Claire Iroudayassamy");
+        System.out.println("            *Game Title Pending* is a new, incredibly unfinished adventure game.");
+        System.out.println("                     Type '" + CommandWord.HELP + "' if you need help.");
+        System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
         System.out.println();
         
     }
@@ -276,13 +288,14 @@ public class Game2
                 break;
 
             case HELP:
-                printHelp();
+                printObjective();
+                printCommands();
                 break;
 
             case GO:
                 goRoom(command);
                 break;
-
+                
             case QUIT:
                 wantToQuit = quit(command);
                 break;
@@ -290,25 +303,29 @@ public class Game2
         return wantToQuit;
     }
 
-    // implementations of user commands:
-
     /**
-     * Print out some help information.
-     * Here we print some stupid, cryptic message and a list of the 
-     * command words.
+     * Print out objective information.
      */
-    private void printHelp() 
+    private void printObjective() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
-        System.out.println();
+        //TODO print more helpful info
+        System.out.println("You are doing something, I reckon.");
+        printCommands();
+    }
+    
+    /**
+     * Print out all command words and a brief description
+     * of how they can be used.
+     */
+    private void printCommands()
+    {
         System.out.println("Your command words are:");
-        parser.showCommands();
+        //TODO add commands
+        
     }
 
     /** 
-     * Try to go in one direction. If there is an exit, enter the new
-     * room, otherwise print an error message.
+     * Go to a new room.
      */
     private void goRoom(Command command) 
     {
@@ -320,22 +337,15 @@ public class Game2
         
         String direction = null;
         if(!command.hasThirdWord()) {
+            //the direction is only one word
             direction = command.getSecondWord();
         } else if(command.hasThirdWord()) {
+            //the direction is two words
             direction = command.getSecondWord() + " " + command.getThirdWord();
         }
 
         // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
-
-        if (nextRoom == null) {
-            System.out.println("There is no door!");
-        }
-        else {
-            previousRoom = currentRoom;
-            currentRoom = nextRoom;
-            System.out.println(currentRoom.getLongDescription());
-        }
+        player.goRoom(direction);
     }
 
     /** 
@@ -382,6 +392,11 @@ public class Game2
      *  Play the game with the trapped player.
      */
     private void playTogether()
+    {
+        
+    }
+    
+    public void test()
     {
         
     }
