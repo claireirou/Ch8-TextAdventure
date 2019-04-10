@@ -24,6 +24,7 @@ public class Room
     private String lookDescription;
     private boolean visited;
     private ArrayList<Item> items;
+    private ArrayList<Person> characters;
 
     /**
      * Create a room described "description". Initially, it has
@@ -36,6 +37,7 @@ public class Room
         name = description;
         exits = new HashMap<String, Room>();
         items = new ArrayList<Item>();
+        characters = new ArrayList<Person>();
         visited = false;
     }
 
@@ -106,7 +108,7 @@ public class Room
         String returnString = "Options:";
         Set<String> keys = exits.keySet();
         for(String exit : keys) {
-            returnString += " " + exit;
+            returnString += " " + exit + ",";
         }
         return returnString;
     }

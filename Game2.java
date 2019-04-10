@@ -28,6 +28,8 @@ public class Game2
             basement, dining, lounge, exit, backyard;
     private Person player,blake;
     private Item placeholder;
+    private boolean wantToQuit;
+    private boolean helped;
         
     /**
      * Create the game and initialise its internal map, items
@@ -49,9 +51,9 @@ public class Game2
     {
         // create the rooms
         hall = new Room("in the main hall");
-        hallRight = new Room("in the main hall");
-        hallLeft = new Room("in the main hall");
-        hallForward = new Room("in the main hall");
+        hallRight = new Room("looking at the right wall of the main hall");
+        hallLeft = new Room("looking at the left wall of the main hall");
+        hallForward = new Room("looking at the back wall of the main hall");
         study = new Room("in the study");
         library = new Room("in the library");
         bathroom = new Room("in the bathroom");
@@ -94,18 +96,19 @@ public class Game2
         
         kitchen.setExit("main hall", hall);
         
-        upstairs.setExit("main hall", hall);
-        upstairs.setExit("right door", masterBedroom);
-        upstairs.setExit("left door", childBedroom);
+        upstairs.setExit("downstairs", hall);
+        upstairs.setExit("right", masterBedroom);
+        upstairs.setExit("left", childBedroom);
         
-        masterBedroom.setExit("upstairs landing", upstairs);
+        masterBedroom.setExit("back", upstairs);
         
         childBedroom.setExit("upstairs landing", upstairs);
         childBedroom.setExit("closet", closet);
         
-        closet.setExit("bedroom", childBedroom);
+        closet.setExit("back", childBedroom);
         
-        basement.setExit("main hall", hall);
+        basement.setExit("upstairs", hall);
+        basement.setExit("cellar door", backyard);
         
         dining.setExit("main hall", hall);
         
@@ -117,7 +120,7 @@ public class Game2
         backyard.setExit("cellar door", basement);
         backyard.setExit("gate", exit);
         
-        /* initialize room look description
+        //initialize room detailed description
         hall.setLookDescription("");
         hallRight.setLookDescription("");
         hallLeft.setLookDescription("");
@@ -130,7 +133,8 @@ public class Game2
         basement.setLookDescription("");
         dining.setLookDescription("");
         lounge.setLookDescription("");
-        exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion.");*/
+        exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion. To " +
+                                 "\nthe left you can see a gate that you assume leads to the backyard.");
     }
     
     /**
@@ -146,7 +150,7 @@ public class Game2
      */
     private void createCharacters()
     {
-        player = new Person(5, exit);
+        player = new Person("Player", 5, exit);
     }
 
     /**
@@ -160,9 +164,9 @@ public class Game2
                             "\n    I can't figure out how to win. Will you help me?");
         System.out.println("\nHelp the trapped player? \nyes no");
         
-        boolean wantToQuit = false;
+        wantToQuit = false;
         boolean done = false;
-        boolean helped = true;
+        helped = true;
         int noCounter = 0;
         int unknownCounter = 0;
         
@@ -184,13 +188,14 @@ public class Game2
                             System.out.println("Help the trapped player? \nyes no");
                             break;
                         case 3:
-                            System.out.println("Trapped Player: Now come on, just type y e s, you can do it!");
+                            System.out.println("Trapped Player: Now come on, just type y e s, you can do it!\n");
                             wait(2000);
                             System.out.println("Help the trapped player? \nyes no");
                             break;
                         case 4:
                             System.out.println("Trapped Player: You know what buddy, don't worry about it." +
                                             "\n    I got you.\n");
+                            wait(2500);
                             System.out.println("Help the trapped player? \nyes no");
                             System.out.print("> ");
                             wait(1000);
@@ -199,6 +204,7 @@ public class Game2
                             System.out.print("e");
                             wait(500);
                             System.out.print("s");
+                            wait(1500);
                             done = true;
                             break;
                     }
@@ -207,6 +213,7 @@ public class Game2
                 case YES:
                     System.out.println("Trapped Player: Awesome! Thank you so much. Let's go!");
                     done = true;
+                    wait(1500);
                     break;
                     
                 case NO:
@@ -216,20 +223,12 @@ public class Game2
                             System.out.println("Trapped Player: Wait man, are you sure? I could " +
                                                 "really use a hand.\n");
                             wait(2000);
-                            System.out.print("P"); wait(200); System.out.print("l"); wait(200);
-                            System.out.print("e"); wait(200); System.out.print("a"); wait(200);
-                            System.out.print("s"); wait(200); System.out.print("e ");
                             System.out.println("Help the trapped player? \nyes no");
                             break;
                         case 2:
-                            System.out.println("Trapped Player: Can I say something to change your mind?\n");
-                            wait(2000);
-                            System.out.print("P"); wait(200); System.out.print("r"); wait(200);
-                            System.out.print("e"); wait(200); System.out.print("t"); wait(200);
-                            System.out.print("t"); wait(200); System.out.print("y "); wait(200);
-                            System.out.print("p"); wait(200); System.out.print("l"); wait(200);
-                            System.out.print("e"); wait(200); System.out.print("a"); wait(200);
-                            System.out.print("s"); wait(200); System.out.print("e "); 
+                            System.out.println("Trapped Player: Is there anything I can I say something to change " +
+                                               "your mind?\n");
+                            wait(2000); 
                             System.out.println("Help the trapped player? \nyes no");
                             break;
                         case 3:
@@ -263,9 +262,9 @@ public class Game2
         
         if(!wantToQuit) {
             if(helped) {
-                playTwo();
+                playTogether();
             } else {
-                playOne();
+                playAlone();
             }
         } else {
             System.out.println("Thank you for playing.  Good bye.");
@@ -285,19 +284,59 @@ public class Game2
     }
     
     /**
-     * Play the game in two player mode.
+     * Play the game with the trapped player.
      */
-    private void playTwo()
+    private void playTogether()
     {
-        
+        printWelcome();
+        printTwoGameDescription();
+        System.out.println(player.getCurrentRoom().getLookDescription());
+        wait(6000);
+        System.out.println();
+        System.out.println("Blake: Haha, how was my acting? So, we need to find the murder weapon and figure out " +
+                           "\n    who committed the murder in order to beat the game. I haven't been able to do either," +
+                           "\n    and my quit command is broken, hence why I'm stuck here.\n");
+        wait(7000);
+        System.out.println(player.getCurrentRoom().getLongDescription());
+        Command command;
+        while(!wantToQuit) {
+            command = parser.getCommand();
+            switch(command.getCommandWord()) {
+                case GO:
+                    goRoom(command);
+                    break;
+                
+                case LOOK:
+                    System.out.println(player.getCurrentRoom().getLookDescription());
+                    break;
+                    
+                case HELP:
+                    break;
+                
+                case QUIT:
+                    wantToQuit = quit();
+                    break;
+                
+                case UNKNOWN:
+                    System.out.println("I don't know what you mean...");
+                    break;
+                
+                default:
+                    System.out.println("You cannot do that right now.");
+                
+                
+            }
+            
+        }
     }
     
     /**
      * Play the game in single player mode.
      */
-    private void playOne()
+    private void playAlone()
     {
-        
+        printWelcome();
+        printGameDescription();
     }
 
     /**
@@ -310,7 +349,7 @@ public class Game2
         System.out.println("                           Welcome to the *Game Title Pending*");
         System.out.println("                                 By Claire Iroudayassamy");
         System.out.println("            *Game Title Pending* is a new, incredibly unfinished adventure game.");
-        System.out.println("                     Type '" + CommandWord.HELP + "' if you need help.");
+        System.out.println("                              Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
         System.out.println();
         
@@ -324,19 +363,26 @@ public class Game2
     {
         System.out.println("You are a detective looking into the unsolved murder of Mr. Charles Bodie. You've just" +
                            "\nreceived notice that your request for a warrant of Mr. Bodie's house has been granted," +
-                           "\nso you and your partner head out to gather evidence.");
+                           "\nso you and your partner head out to gather evidence.\n");
+        wait(7000);
         System.out.println("Trapped Player: Oh hey! That's me; I'm your parnter! My name's Blake, by the way.");
         System.out.println();
+        wait(4000);
         System.out.println("On your drive over to the house, you and your partner go over the case.");
         System.out.println();
+        wait(3000);
         System.out.println("Blake: So apparently, Bodie was having a dinner party when the power in the house suddenly" +
                            "\n    went out. One of the guests says that she was in the study with Bodie when the lights" +
-                           "\n    shut off and when they came back on, she claims that Bodie was dead on the ground. She" +
-                           "\n    didn't see anything or hear anything. There was no one else in the study to back up her" +
-                           "\n    statements but we haven't found anything solid enough to convict her.");
+                           "\n    shut off and when they came back on, she claims that Bodie was dead on the ground." +
+                           "\n    She didn't see anything or hear anything. There was no one else in the study to back" +
+                           "\n    up her statements but we haven't found anything solid enough to convict her.");
+        wait(11000);
         System.out.println("Blake: Some of the guests have been staying with Mr. Bodie; something about a vacation, so " +
-                           "\n    we should be able to talk to some of them. Let's see if we can't close up this case" +
+                           "\n    we should be able to talk to some of them. Let's see if we can't close this case" +
                            "\n    tonight, I've got tacos waiting for me at home.");
+        System.out.println();
+        wait(7000);
+        System.out.println("You arrive at the house and get out of the car.");
     }
     
     /**
@@ -348,6 +394,7 @@ public class Game2
         System.out.println("You are a detective looking into the unsolved murder of Mr. Charles Bodie. You've just" +
                            "\nreceived notice that your request for a warrant of Mr. Bodie's house has been granted," +
                            "\nso you head out to gather evidence.");
+        wait(3000);
     }
 
     /**
@@ -376,7 +423,7 @@ public class Game2
                 break;
                 
             case QUIT:
-                wantToQuit = quit(command);
+                wantToQuit = quit();
                 break;
         }
         return wantToQuit;
@@ -400,7 +447,7 @@ public class Game2
     {
         System.out.println("Your command words are:");
         //TODO add commands
-        
+        System.out.println(player.getCurrentRoom().getLongDescription());
     }
 
     /** 
@@ -432,15 +479,20 @@ public class Game2
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
      */
-    private boolean quit(Command command) 
+    private boolean quit() 
     {
-        if(command.hasSecondWord()) {
-            System.out.println("Quit what?");
-            return false;
+        System.out.println("Are you sure you want to quit? \nyes no");
+        if(parser.getCommand().getCommandWord().toString().equals("yes")) {
+            if(helped) {
+                System.out.println("Blake: Wait! Don't lea");
+                wait(200);
+            }
+            System.out.println("Thank you for playing.  Good bye.");
+            return true; // signal that we want to quit
+        } else {
+            System.out.println(player.getCurrentRoom().getLongDescription());
         }
-        else {
-            return true;  // signal that we want to quit
-        }
+        return false;
     }
     
     /**
@@ -457,22 +509,6 @@ public class Game2
         {
             Thread.currentThread().interrupt();
         }
-    }
-    
-    /**
-     * Play the game alone.
-     */
-    private void playAlone()
-    {
-        
-    }
-    
-    /**
-     *  Play the game with the trapped player.
-     */
-    private void playTogether()
-    {
-        
     }
     
     public void test()

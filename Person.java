@@ -21,8 +21,9 @@ public class Person
      * @param inventorySize The max size of the person's inventory.
      * @param startRoom The room the person starts in.
      */
-    public Person(int inventorySize, Room startingRoom)
+    public Person(String name, int inventorySize, Room startingRoom)
     {
+        this.name = name;
         inventory = new ArrayList<Item>();
         this.inventorySize = inventorySize;
         currentRoom = startingRoom;
@@ -82,6 +83,7 @@ public class Person
             } else {
                 currentRoom.visit();
                 System.out.println(currentRoom.getLookDescription());
+                System.out.println(currentRoom.getLongDescription());
             }
         }
     }
@@ -111,5 +113,13 @@ public class Person
     public Room getPreviousRoom()
     {
         return previousRoom;
+    }
+    
+    /**
+     * Return the person's name.
+     */
+    public String getName()
+    {
+        return name;
     }
 }
