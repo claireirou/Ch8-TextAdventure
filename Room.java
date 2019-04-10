@@ -70,11 +70,12 @@ public class Room
     }
     
     /**
-     * 
+     *  Return a detailed description of the room.
+     *  @return A look description of this room
      */
     public String getLookDescription()
     {
-        return null;
+        return lookDescription;
     }
     
     /**
@@ -119,6 +120,15 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+    
+    /**
+     *  Remove an exit from this room.
+     *  @param direction The direction of the exit
+     */
+    public void removeExit(String direction)
+    {
+        exits.remove(direction);
     }
     
     /**

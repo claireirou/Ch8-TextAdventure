@@ -112,8 +112,12 @@ public class Game2
         lounge.setExit("main hall", hall);
         
         exit.setExit("front door", hall);
+        exit.setExit("gate", backyard);
         
-        // initialize room look description
+        backyard.setExit("cellar door", basement);
+        backyard.setExit("gate", exit);
+        
+        /* initialize room look description
         hall.setLookDescription("");
         hallRight.setLookDescription("");
         hallLeft.setLookDescription("");
@@ -126,7 +130,7 @@ public class Game2
         basement.setLookDescription("");
         dining.setLookDescription("");
         lounge.setLookDescription("");
-        exit.setLookDescription("");
+        exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion.");*/
     }
     
     /**
@@ -146,7 +150,7 @@ public class Game2
     }
 
     /**
-     *  Main play routine.  Loops until end of play.
+     *  Main play routine.
      */
     public void play() 
     {            
@@ -238,10 +242,16 @@ public class Game2
                     break;
                     
                 case QUIT:
-                    System.out.println("Trapped Player: Already? Okay, I guess I'll figure it out on my own.");
-                    done = true;
-                    wantToQuit = true;
-                    break;
+                    System.out.println("Are you sure you want to quit? \nyes no");
+                    if(parser.getCommand().getCommandWord().toString().equals("yes")) {
+                        System.out.println("Trapped Player: Already? Okay, I guess I'll figure it out on my own.\n");
+                        done = true;
+                        wantToQuit = true;
+                        break;
+                    } else {
+                        System.out.println("Help the trapped player? \nyes no");
+                        break;
+                    }
                     
                 default:
                     System.out.println("Trapped Player: You're getting ahead of yourself, there. Before that, " +
@@ -251,9 +261,14 @@ public class Game2
             }
         }
         
-        while (!wantToQuit) {
-            printWelcome();
-            
+        if(!wantToQuit) {
+            if(helped) {
+                playTwo();
+            } else {
+                playOne();
+            }
+        } else {
+            System.out.println("Thank you for playing.  Good bye.");
         }
         
         
@@ -267,6 +282,22 @@ public class Game2
         }
         System.out.println("Thank you for playing.  Good bye.");
         */
+    }
+    
+    /**
+     * Play the game in two player mode.
+     */
+    private void playTwo()
+    {
+        
+    }
+    
+    /**
+     * Play the game in single player mode.
+     */
+    private void playOne()
+    {
+        
     }
 
     /**
@@ -283,6 +314,40 @@ public class Game2
         System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
         System.out.println();
         
+    }
+    
+    /**
+     * Print out the two player game description message 
+     * for the player.
+     */
+    private void printTwoGameDescription()
+    {
+        System.out.println("You are a detective looking into the unsolved murder of Mr. Charles Bodie. You've just" +
+                           "\nreceived notice that your request for a warrant of Mr. Bodie's house has been granted," +
+                           "\nso you and your partner head out to gather evidence.");
+        System.out.println("Trapped Player: Oh hey! That's me; I'm your parnter! My name's Blake, by the way.");
+        System.out.println();
+        System.out.println("On your drive over to the house, you and your partner go over the case.");
+        System.out.println();
+        System.out.println("Blake: So apparently, Bodie was having a dinner party when the power in the house suddenly" +
+                           "\n    went out. One of the guests says that she was in the study with Bodie when the lights" +
+                           "\n    shut off and when they came back on, she claims that Bodie was dead on the ground. She" +
+                           "\n    didn't see anything or hear anything. There was no one else in the study to back up her" +
+                           "\n    statements but we haven't found anything solid enough to convict her.");
+        System.out.println("Blake: Some of the guests have been staying with Mr. Bodie; something about a vacation, so " +
+                           "\n    we should be able to talk to some of them. Let's see if we can't close up this case" +
+                           "\n    tonight, I've got tacos waiting for me at home.");
+    }
+    
+    /**
+     * Print out the single player game description message
+     * for the player.
+     */
+    private void printGameDescription()
+    {
+        System.out.println("You are a detective looking into the unsolved murder of Mr. Charles Bodie. You've just" +
+                           "\nreceived notice that your request for a warrant of Mr. Bodie's house has been granted," +
+                           "\nso you head out to gather evidence.");
     }
 
     /**
