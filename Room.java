@@ -23,6 +23,7 @@ public class Room
     private HashMap<String, Room> exits;        // stores exits of this room.
     private String lookDescription;
     private boolean visited;
+    private boolean locked;
     private ArrayList<Item> items;
     private ArrayList<Person> characters;
 
@@ -32,9 +33,10 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description) 
+    public Room(String description, boolean locked) 
     {
         name = description;
+        this.locked = locked;
         exits = new HashMap<String, Room>();
         items = new ArrayList<Item>();
         characters = new ArrayList<Person>();
@@ -155,6 +157,26 @@ public class Room
     public void visit()
     {
         visited = true;
+    }
+    
+    /**
+     * Get the room's locked status
+     * @return true, if the room is locked, false if it isn't
+     */
+    public boolean isLocked()
+    {
+        return locked;
+    }
+    
+    /**
+     * Unlock the room. If the room is already unlocked
+     * do nothing.
+     */
+    public void unlock()
+    {
+        if(locked) {
+            locked = false;
+        }
     }
 }
 

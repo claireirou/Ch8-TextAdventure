@@ -50,23 +50,23 @@ public class Game2
     private void createRooms()
     {
         // create the rooms
-        hall = new Room("in the main hall");
-        hallRight = new Room("looking at the right wall of the main hall");
-        hallLeft = new Room("looking at the left wall of the main hall");
-        hallForward = new Room("looking at the back wall of the main hall");
-        study = new Room("in the study");
-        library = new Room("in the library");
-        bathroom = new Room("in the bathroom");
-        kitchen = new Room("in the kitchen");
-        upstairs = new Room("on the landing of the second floor");
-        masterBedroom = new Room("in the master bedroom");
-        childBedroom = new Room("in a child's bedroom");
-        closet = new Room("in a closet");
-        basement = new Room("in the basement");
-        dining = new Room("in the dining room");
-        lounge = new Room("in the lounge");
-        exit = new Room("in the front yard");
-        backyard = new Room("in the back yard");
+        hall = new Room("in the main hall", false);
+        hallRight = new Room("looking at the right wall of the main hall", false);
+        hallLeft = new Room("looking at the left wall of the main hall", false);
+        hallForward = new Room("looking at the back wall of the main hall", false);
+        study = new Room("in the study", false);
+        library = new Room("in the library", false);
+        bathroom = new Room("in the bathroom", false);
+        kitchen = new Room("in the kitchen", false);
+        upstairs = new Room("on the landing of the second floor", false);
+        masterBedroom = new Room("in the master bedroom", false);
+        childBedroom = new Room("in a child's bedroom", false);
+        closet = new Room("in a closet", true);
+        basement = new Room("in the basement", true);
+        dining = new Room("in the dining room", false);
+        lounge = new Room("in the lounge", false);
+        exit = new Room("in the front yard", false);
+        backyard = new Room("in the back yard", false);
         
         // initialise room exits
         hall.setExit("right", hallRight);
@@ -79,7 +79,7 @@ public class Game2
         hallForward.setExit("back", hall);
         
         hallLeft.setExit("right door", basement);
-        hallLeft.setExit("middle door", dining);
+        hallLeft.setExit("dining room", dining);
         hallLeft.setExit("left door", lounge);
         hallLeft.setExit("back", hall);
         
@@ -102,7 +102,7 @@ public class Game2
         
         masterBedroom.setExit("back", upstairs);
         
-        childBedroom.setExit("upstairs landing", upstairs);
+        childBedroom.setExit("back", upstairs);
         childBedroom.setExit("closet", closet);
         
         closet.setExit("back", childBedroom);
@@ -120,21 +120,34 @@ public class Game2
         backyard.setExit("cellar door", basement);
         backyard.setExit("gate", exit);
         
-        //initialize room detailed description
-        hall.setLookDescription("");
-        hallRight.setLookDescription("");
-        hallLeft.setLookDescription("");
-        hallForward.setLookDescription("");
-        study.setLookDescription("");
-        library.setLookDescription("");
+        //assign detailed room description
+        hall.setLookDescription("You are in a grand hall with marble flooring and a tall ceiling. you can see multiple" +
+                                "\ndoors lining the walls on both the left and right side. At the back of the hall" +
+                                "\nthere is a staircase going up on the left and another door to the right of it.");
+        hallRight.setLookDescription("The right wall of the hall has three doors on it. All of them are closed.");
+        hallLeft.setLookDescription("The left wall of the hall has two closed doors and a set of double doors propped" +
+                                    "\nopen that lead to what appears to be a dining room");
+        hallForward.setLookDescription("To your left there is a large staircase to the upper floor and to the right," +
+                                    "\na single closed door.");
+        study.setLookDescription("You are in a study with an ornate wooden desk towards the back of the room. In the" +
+                                "\nmiddle of the room there are two couches facing each other with a glasstop coffee" +
+                                "\ntable between them. There is a fireplace along the left wall and the right wall" +
+                                "\nis lined with bookcases. You can see a small drinking cart to the left of the desk.");
+        library.setLookDescription("You are in a library with floor to ceiling bookcases lining the walls. The back" +
+                                   "\nwall has a large window with a cozy looking window seat. In the center of the "+
+                                   "\nroom is a small couch and an armchair with a wooden side table next to it.");
         bathroom.setLookDescription("");
         kitchen.setLookDescription("");
         upstairs.setLookDescription("");
+        masterBedroom.setLookDescription("");
+        childBedroom.setLookDescription("");
+        closet.setLookDescription("");
         basement.setLookDescription("");
         dining.setLookDescription("");
         lounge.setLookDescription("");
         exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion. To " +
-                                 "\nthe left you can see a gate that you assume leads to the backyard.");
+                                 "\nthe left, you can see a gate that you assume leads to the backyard.");
+        backyard.setLookDescription("");
     }
     
     /**

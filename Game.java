@@ -41,19 +41,19 @@ public class Game
         kitchen, upstairs, basement, dining, lounge, exit;
       
         // create the rooms
-        hall = new Room("in the main hall");
-        hallRight = new Room("in the main hall");
-        hallLeft = new Room("in the main hall");
-        hallForward = new Room("in the main hall");
-        study = new Room("in the study");
-        library = new Room("in the library");
-        bathroom = new Room("in the bathroom");
-        kitchen = new Room("in the kitchen");
-        upstairs = new Room("on the landing of the second floor");
-        basement = new Room("in the basement");
-        dining = new Room("in the dining room");
-        lounge = new Room("in the lounge");
-        exit = new Room("outside");
+        hall = new Room("in the main hall", false);
+        hallRight = new Room("in the main hall", false);
+        hallLeft = new Room("in the main hall", false);
+        hallForward = new Room("in the main hall", false);
+        study = new Room("in the study", false);
+        library = new Room("in the library", false);
+        bathroom = new Room("in the bathroom", false);
+        kitchen = new Room("in the kitchen", false);
+        upstairs = new Room("on the landing of the second floor", false);
+        basement = new Room("in the basement", false);
+        dining = new Room("in the dining room", false);
+        lounge = new Room("in the lounge", false);
+        exit = new Room("outside", false);
         
         // initialise room exits
         hall.setExit("right", hallRight);

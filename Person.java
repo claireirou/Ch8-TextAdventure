@@ -28,6 +28,7 @@ public class Person
         this.inventorySize = inventorySize;
         currentRoom = startingRoom;
         previousRoom = null;
+        currentRoom.visit();
     }
     
     /**
@@ -50,7 +51,7 @@ public class Person
     /**
      * Drop item from inventory.
      * @param item The item to drop
-     * @param currentRoom The room the item is dropped in
+     * @param currentRoom The room to drop the item in
      */
     public void dropItem(Item item, Room currentRoom)
     {
@@ -73,8 +74,10 @@ public class Person
         nextRoom = currentRoom.getExit(direction);
         if (nextRoom == null) {
             System.out.println("You cannot go that way!");
-        }
-        else {
+        } else if (nextRoom.isLocked()) {
+              System.out.println("The door is locked.");
+              nextRoom = null;
+        } else {
             previousRoom = currentRoom;
             currentRoom = nextRoom;
             nextRoom = null;
