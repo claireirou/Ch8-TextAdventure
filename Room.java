@@ -122,11 +122,19 @@ public class Room
     }
     
     /**
-     * Add all items in the room to ArrayList
+     * Add item in the room to ArrayList
      */
-    public void addItem(String description)
+    public void addItem(Item item)
     {
-        
+        items.add(item);
+    }
+    
+    /**
+     * Remove an item from the room.
+     */
+    public void removeItem(Item item)
+    {
+        items.remove(item);
     }
     
     /**

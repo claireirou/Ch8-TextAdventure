@@ -24,7 +24,8 @@ public class Game2
     private Room previousRoom;
     private String gameTitle;
     private Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, 
-            kitchen, upstairs, basement, dining, lounge, exit;
+            kitchen, upstairs, masterBedroom, childBedroom, closet,
+            basement, dining, lounge, exit, backyard;
     private Person player,blake;
     private Item placeholder;
         
@@ -56,10 +57,14 @@ public class Game2
         bathroom = new Room("in the bathroom");
         kitchen = new Room("in the kitchen");
         upstairs = new Room("on the landing of the second floor");
+        masterBedroom = new Room("in the master bedroom");
+        childBedroom = new Room("in a child's bedroom");
+        closet = new Room("in a closet");
         basement = new Room("in the basement");
         dining = new Room("in the dining room");
         lounge = new Room("in the lounge");
-        exit = new Room("outside");
+        exit = new Room("in the front yard");
+        backyard = new Room("in the back yard");
         
         // initialise room exits
         hall.setExit("right", hallRight);
@@ -90,6 +95,15 @@ public class Game2
         kitchen.setExit("main hall", hall);
         
         upstairs.setExit("main hall", hall);
+        upstairs.setExit("right door", masterBedroom);
+        upstairs.setExit("left door", childBedroom);
+        
+        masterBedroom.setExit("upstairs landing", upstairs);
+        
+        childBedroom.setExit("upstairs landing", upstairs);
+        childBedroom.setExit("closet", closet);
+        
+        closet.setExit("bedroom", childBedroom);
         
         basement.setExit("main hall", hall);
         

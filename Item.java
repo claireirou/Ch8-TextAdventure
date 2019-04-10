@@ -31,10 +31,11 @@ public class Item
      * 
      * @param room The room the item is located in.
      */
-    public void addToRoom(Room room)
+    public void addToRoom(Room room, Item item)
     {
         this.room = room;
         person = null;
+        room.addItem(item);
     }
     
     /**
@@ -43,10 +44,11 @@ public class Item
      *  @return true if item is added and false if item cannont
      *      be added.
      */
-    public boolean addToInventory(String person)
+    public boolean addToInventory(String person, Item item)
     {
        if(weight < 50) {
             this.person = person;
+            room.removeItem(item);
             room = null;
             return true;
        }

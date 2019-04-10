@@ -36,7 +36,7 @@ public class Person
     public void addItem(Item item)
     {
         if(inventory.size() <= inventorySize) {
-            if(item.addToInventory(name)) {
+            if(item.addToInventory(name, item)) {
                 inventory.add(item);
             } else {
                 System.out.println("This item cannot be carried.");
@@ -55,7 +55,10 @@ public class Person
     {
         if(inventory.contains(item)) {
             inventory.remove(item);
-            item.addToRoom(currentRoom);
+            item.addToRoom(currentRoom, item);
+            System.out.println(item.getName() + " dropped.");
+        } else {
+            System.out.println("You do not have this item in your inventory!");
         }
     }
     
@@ -109,6 +112,4 @@ public class Person
     {
         return previousRoom;
     }
-    
-
 }
