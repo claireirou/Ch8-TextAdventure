@@ -30,7 +30,7 @@ public class Game2
     private Item placeholder;
     private boolean wantToQuit;
     private boolean helped;
-        
+
     /**
      * Create the game and initialise its internal map, items
      * and characters.
@@ -42,6 +42,12 @@ public class Game2
         createCharacters();
         parser = new Parser();
         gameTitle = "*Game Title Pending*";
+    }
+    
+    public static void main (String[] args)
+    {
+        Game2 game = new Game2();
+        game.play();
     }
 
     /**
