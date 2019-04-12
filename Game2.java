@@ -28,12 +28,13 @@ public class Game2
             closet, basement, dining, lounge, exit, backyard;
     private Person player,blake;
     private Item coffeeTable, desk, bookcase, fireplace, drinkingCart, bookshelves, windowSeat,
-            sideTable, cabinet, toilet, tiles, ovens, cupboards, crates, metalShelves, boxes, carcass,
-            table, vase, candle, bed, nightstand, tub, shower, jewelryBox, vanity, rug, bunkBed,
+            sideTable, cabinet, toilet, tiles, ovens, stovetop, pot, cupboards, crates, metalShelves, boxes, carcass,
+            table, vase, candle, bed, nightstand, tub, shower, jewelryBox, vanity, rug, floorboard, bunkBed,
             smallDesk, clothes, readingNook, book, woodShelves, mower,diningTable, 
             plateSettings, candelabrum, cigarBox,drinkingCart2;
-    private Item canister, toolbox, basementKey, closetKey, blueprints, hammer, cigars, studyDrawer1, studyDrawer2,
-            childDrawer, nightDrawer, knife, freezerKey, kitchenKnife;
+    private Item canister, toolbox, basementKey, closetKey, blueprints, hammer, cigars, studyDrawer1, 
+            studyDrawer2, childDrawer, nightDrawer, knife, freezerKey, kitchenKnife, placeholderKey, 
+            placeholderKey2, backpack;
     private boolean wantToQuit;
     private boolean helped;
 
@@ -84,23 +85,23 @@ public class Game2
         backyard = new Room("in the back yard", false);
         
         // initialise room exits
-        hall.setExit("right", hallRight);
         hall.setExit("left", hallLeft);
         hall.setExit("forward", hallForward);
+        hall.setExit("right", hallRight);
         hall.setExit("front door", exit);
         
         hallForward.setExit("right door", kitchen);
         hallForward.setExit("upstairs", upstairs);
         hallForward.setExit("back", hall);
         
-        hallLeft.setExit("right door", basement);
-        hallLeft.setExit("dining room", dining);
         hallLeft.setExit("left door", lounge);
+        hallLeft.setExit("dining room", dining);
+        hallLeft.setExit("right door", basement);
         hallLeft.setExit("back", hall);
         
-        hallRight.setExit("right door", study);
-        hallRight.setExit("middle door", library);
         hallRight.setExit("left door", bathroom);
+        hallRight.setExit("middle door", library);
+        hallRight.setExit("right door", study);
         hallRight.setExit("back", hall);
         
         study.setExit("main hall", hall);
@@ -109,30 +110,30 @@ public class Game2
         
         bathroom.setExit("main hall", hall);
         
-        kitchen.setExit("main hall", hall);
         kitchen.setExit("fridge", fridge);
         kitchen.setExit("freezer", freezer);
+        kitchen.setExit("main hall", hall);
         
         fridge.setExit("back", kitchen);
         
         freezer.setExit("back", kitchen);
         
-        upstairs.setExit("downstairs", hall);
-        upstairs.setExit("right", masterBedroom);
         upstairs.setExit("left", childBedroom);
+        upstairs.setExit("right", masterBedroom);
+        upstairs.setExit("downstairs", hall);
         
         masterBedroom.setExit("master bath", masterBath);
         masterBedroom.setExit("back", upstairs);
         
         masterBath.setExit("back", masterBedroom);
         
-        childBedroom.setExit("back", upstairs);
         childBedroom.setExit("closet", closet);
+        childBedroom.setExit("back", upstairs);
         
         closet.setExit("back", childBedroom);
         
-        basement.setExit("upstairs", hall);
         basement.setExit("cellar door", backyard);
+        basement.setExit("upstairs", hall);
         
         dining.setExit("main hall", hall);
         
@@ -166,9 +167,9 @@ public class Game2
         kitchen.setLookDescription("You are in a large kitchen with granite counters and dark wooden cupboards. An "+
                                 "\n oversized center island takes up a large portion of the space and on it sits" +
                                 "\na fruit bowl and a flower vase filled with peonies. Along the left wall are" +
-                                "\nthree ovens each with six-place stovetops. One of the stove tops has a large" +
+                                "\nthree ovens each with six-place stovetops. One of the stovetops has a large" +
                                 "\ncovered pot that appears to be simmering. The back wall has a large window with" +
-                                "\na wide sink below it. To your right are two large metal doors.");
+                                "\na wide sink below it. To your right are two large metal doors with silver handles.");
         fridge.setLookDescription("You are standing inside a walk-in refrigerator that is lined with shelves on all" +
                                 "\nthree walls. The shelves hold various crates filled with food and ingredients.");
         freezer.setLookDescription("You are inside of a walk-in freezer. It is unbelievably cold. There are shelves" +
@@ -198,7 +199,7 @@ public class Game2
                                 "\nput out and a candelabrum center piece.");
         lounge.setLookDescription("You are in a lounge with two large couches and two leather armchairs. There is a "+
                                 "\nside table next to one of the arm chairs with a cigar box on it. There is a" +
-                                "\ndrinking cart just to the left of the door.");
+                                "\nsmall table that serves as a drinking cart just to the left of the door.");
         exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion. To " +
                                  "\nthe left, you can see a gate that you assume leads to the backyard.");
         backyard.setLookDescription("You are in a inclosed side yard that streches the length of the house. There is" +
@@ -211,65 +212,150 @@ public class Game2
      */
     private void createItems()
     {
-        // create the items in rooms
-        coffeeTable = new Item("coffee table", study, 40); 
-        desk = new Item("desk", study, 90);
-        bookcase = new Item("bookcase", study, 100);
-        fireplace = new Item("fireplace", study, 1000);
-        drinkingCart = new Item("drinking cart", study, 50);
-        bookshelves = new Item("bookshelves", library, 100);
-        windowSeat = new Item("window seat", library, 1000);
-        sideTable = new Item("side table", library, 55);
-        cabinet = new Item("cabinet", bathroom, 55);
-        toilet = new Item("toilet", bathroom, 75);
-        tiles = new Item("tiles", bathroom, 1);
-        ovens = new Item("ovens", kitchen, 150);
-        cupboards = new Item("cupboards", kitchen, 100);
-        crates = new Item("crates", fridge, 20);
-        metalShelves = new Item("shelves", freezer, 30);
-        boxes = new Item("boxes", freezer, 20);
-        carcass = new Item("carcass", freezer, 25);
-        table = new Item("table", upstairs, 40);
-        vase = new Item("vase", upstairs, 15);
-        candle = new Item("candle", upstairs, 2);
-        bed = new Item("bed", masterBedroom, 100);
-        nightstand = new Item("nightstand", masterBedroom, 40);
-        tub = new Item("bathtub", masterBath, 100);
-        shower = new Item("shower", masterBath, 1000);
-        jewelryBox = new Item("jewelry box", masterBath, 5);
-        vanity = new Item("vanity", masterBath, 1000);
-        rug = new Item("rug", childBedroom, 15);
-        bunkBed = new Item("bunk bed", childBedroom, 60);
-        smallDesk = new Item("small desk", childBedroom, 30);
-        clothes = new Item("clothes", closet, 15);
-        readingNook = new Item("reading nook", closet, 1000);
-        book = new Item("book", closet, 3);
-        woodShelves = new Item("shelves", basement, 40);
-        mower = new Item("mower", basement, 150);
-        diningTable = new Item("dining table", dining, 100);
-        plateSettings = new Item("plate settings", dining, 20);
-        candelabrum = new Item("candelabrum", dining, 5);
-        cigarBox = new Item("cigar box", lounge, 5);
-        drinkingCart2 = new Item("drinking cart", lounge, 50);
+        // create the items
+        coffeeTable = new Item("coffee table", 40); 
+        desk = new Item("desk", 90);
+        bookcase = new Item("bookcase", 100);
+        fireplace = new Item("fireplace", 1000);
+        drinkingCart = new Item("drinking cart", 50);
+        bookshelves = new Item("bookshelves", 100);
+        windowSeat = new Item("window seat", 1000);
+        sideTable = new Item("side table", 55);
+        cabinet = new Item("cabinet", 55);
+        toilet = new Item("toilet", 75);
+        tiles = new Item("tiles", 1);
+        ovens = new Item("ovens", 1000);
+        stovetop = new Item("stovetop", 1000);
+        pot = new Item("pot", 10);
+        cupboards = new Item("cupboards", 100);
+        crates = new Item("crates", 20);
+        metalShelves = new Item("shelves", 30);
+        boxes = new Item("boxes", 20);
+        carcass = new Item("carcass", 25);
+        table = new Item("table", 40);
+        vase = new Item("vase", 15);
+        candle = new Item("candle", 2);
+        bed = new Item("bed", 100);
+        nightstand = new Item("nightstand", 40);
+        tub = new Item("bathtub", 100);
+        shower = new Item("shower", 1000);
+        jewelryBox = new Item("jewelry box", 5);
+        vanity = new Item("vanity", 1000);
+        rug = new Item("rug", 15);
+        floorboard = new Item("floorboard", 10);
+        bunkBed = new Item("bunk bed", 60);
+        smallDesk = new Item("small desk", 30);
+        clothes = new Item("clothes",15);
+        readingNook = new Item("reading nook", 1000);
+        book = new Item("book", 3);
+        woodShelves = new Item("shelves", 40);
+        mower = new Item("mower", 150);
+        diningTable = new Item("dining table", 100);
+        plateSettings = new Item("plate settings", 20);
+        candelabrum = new Item("candelabrum", 5);
+        cigarBox = new Item("cigar box", 5);
+        drinkingCart2 = new Item("small table", 50);
+        
         
         // create the items inside items
         canister = new Item("canister tube", woodShelves, 5);
         toolbox = new Item("toolbox", woodShelves, 10);
-        basementKey = new Item("gold key", nightDrawer, 1);
         closetKey = new Item("bronze key", tiles, 1);
         freezerKey = new Item("silver key", book, 1);
         blueprints = new Item("blueprints", canister, 2);
         hammer = new Item("hammer", toolbox, 5);
-        cigars = new Item("cigars", studyDrawer2, 3);
         studyDrawer1 = new Item("top drawer", desk, 15);
         studyDrawer2 = new Item("bottom drawer", desk, 15);
         childDrawer = new Item("drawer", smallDesk, 10);
+        backpack = new Item("backpack", readingNook ,0);
         nightDrawer = new Item("drawer", nightstand, 15);
+        cigars = new Item("cigars", studyDrawer2, 3);
+        basementKey = new Item("gold key", nightDrawer, 1);
         knife = new Item("steak knife", plateSettings, 4);
         kitchenKnife = new Item("kitchen knife", cupboards, 4);
-        
+        placeholderKey = new Item("placeholder", cigarBox, 1);
+        placeholderKey2 = new Item("placeholder2", floorboard, 1);
         
         //TODO assign details
+        coffeeTable.setDetails("");
+    }
+    
+    /**
+     *  Put the items in the rooms
+     */
+    private void poplulateItems()
+    {
+        //Add items to rooms
+        study.addItem("coffee table", coffeeTable);
+        study.addItem("desk", desk);
+        study.addItem("bookcase", bookcase);
+        study.addItem("fireplace", fireplace);
+        study.addItem("drinking cart", drinkingCart);
+        study.addItem("top drawer", studyDrawer1);
+        study.addItem("bottom drawer", studyDrawer2);
+        study.addItem("cigars", cigars);
+        
+        library.addItem("bookshelves", bookshelves);
+        library.addItem("window seat", windowSeat);
+        library.addItem("side table", sideTable);
+        
+        bathroom.addItem("cabinet", cabinet);
+        bathroom.addItem("toilet", toilet);
+        bathroom.addItem("tiles", tiles);
+        bathroom.addItem("bronze key", closetKey);
+        
+        kitchen.addItem("ovens", ovens);
+        kitchen.addItem("cupboards", cupboards);
+        kitchen.addItem("kitchen knife", kitchenKnife);
+        kitchen.addItem("stovetop", stovetop);
+        
+        fridge.addItem("crates", crates);
+        
+        freezer.addItem("metal shelves", metalShelves);
+        freezer.addItem("boxes", boxes);
+        freezer.addItem("carcass", carcass);
+        
+        upstairs.addItem("table", table);
+        upstairs.addItem("vase", vase);
+        upstairs.addItem("candle", candle);
+        
+        masterBedroom.addItem("bed", bed);
+        masterBedroom.addItem("nightstand", nightstand);
+        masterBedroom.addItem("drawer", nightDrawer);
+        masterBedroom.addItem("gold key", basementKey);
+        
+        masterBath.addItem("bathtub", tub);
+        masterBath.addItem("shower", shower);
+        masterBath.addItem("vanity", vanity);
+        masterBath.addItem("jewelry box", jewelryBox);
+        
+        childBedroom.addItem("rug", rug);
+        childBedroom.addItem("bunk bed", bunkBed);
+        childBedroom.addItem("small desk", smallDesk);
+        childBedroom.addItem("small drawer", childDrawer);
+        childBedroom.addItem("floorboard", floorboard);
+        childBedroom.addItem("placeholder2", placeholderKey2);
+        
+        closet.addItem("clothes", clothes);
+        closet.addItem("reading nook", readingNook);
+        closet.addItem("book", book);
+        closet.addItem("silver key", freezerKey);
+        closet.addItem("backpack", backpack);
+        
+        basement.addItem("wooden shelves", woodShelves);
+        basement.addItem("mower", mower);
+        basement.addItem("canister tube", canister);
+        basement.addItem("toolbox", toolbox);
+        basement.addItem("hammer", hammer);
+        basement.addItem("blueprints", blueprints);
+
+        dining.addItem("dining table", diningTable);
+        dining.addItem("plate settings", plateSettings);
+        dining.addItem("candelabrum", candelabrum);
+        dining.addItem("steak knife", knife);
+        
+        lounge.addItem("cigar box", cigarBox);
+        lounge.addItem("small table", drinkingCart2);
     }
     
     /**
@@ -429,11 +515,27 @@ public class Game2
             command = parser.getCommand();
             switch(command.getCommandWord()) {
                 case GO:
-                    goRoom(command);
+                    if(command.getSecondWord().equals("back")) {
+                        player.goBack();
+                    } else {
+                        goRoom(command);
+                    }
                     break;
                 
                 case LOOK:
                     System.out.println(player.getCurrentRoom().getLookDescription());
+                    break;
+                    
+                case EXAMINE:
+                    break;
+                    
+                case USE:
+                    break;
+                
+                case TAKE:
+                    break;
+                    
+                case GIVE:
                     break;
                     
                 case HELP:
@@ -598,6 +700,48 @@ public class Game2
 
         // Try to leave current room.
         player.goRoom(direction);
+    }
+    
+    /**
+     * Examine an item
+     */
+    private void examineItem(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            System.out.println("Examine what?");
+        }
+        
+        String itemName = null;
+        if(!command.hasThirdWord()) {
+            // The item is only one word
+            itemName = command.getSecondWord();
+        } else {
+            // the item has two words
+            itemName = command.getSecondWord() + " " + command.getThirdWord();
+        }
+        
+        //TODO the actual examine part
+    }
+    
+    /**
+     * Add item to inventory
+     */
+    private void takeItem(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            System.out.println("Take what?");
+        }
+        
+        String itemName = null;
+        if(!command.hasThirdWord()) {
+            // The item is only one word
+            itemName = command.getSecondWord();
+        } else {
+            // the item has two words
+            itemName = command.getSecondWord() + " " + command.getThirdWord();
+        }
+        
+        
     }
 
     /** 

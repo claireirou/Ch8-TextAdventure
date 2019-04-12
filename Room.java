@@ -24,7 +24,7 @@ public class Room
     private String lookDescription;
     private boolean visited;
     private boolean locked;
-    private ArrayList<Item> items;
+    private HashMap<String, Item> items;
     private ArrayList<Person> characters;
 
     /**
@@ -38,7 +38,7 @@ public class Room
         name = description;
         this.locked = locked;
         exits = new HashMap<String, Room>();
-        items = new ArrayList<Item>();
+        items = new HashMap<String, Item>();
         characters = new ArrayList<Person>();
         visited = false;
     }
@@ -65,7 +65,7 @@ public class Room
     /**
      * Return a description of the room in the form:
      *     You are in the kitchen.
-     *     Options: north west
+     *     Exit: north west
      * @return A long description of this room
      */
     public String getLongDescription()
@@ -102,12 +102,12 @@ public class Room
 
     /**
      * Return a string describing the room's exits, for example
-     * "Options: north west".
+     * "Exits: north west".
      * @return Details of the room's exits.
      */
     private String getExitString()
     {
-        String returnString = "Options:";
+        String returnString = "Exits:";
         Set<String> keys = exits.keySet();
         for(String exit : keys) {
             returnString += " " + exit + ",";
@@ -138,17 +138,36 @@ public class Room
     /**
      * Add item in the room to ArrayList
      */
-    public void addItem(Item item)
+    public void addItem(String name, Item item)
     {
-        items.add(item);
+        items.put(name, item);
     }
     
     /**
      * Remove an item from the room.
      */
-    public void removeItem(Item item)
+    public void removeItem(String name, Item item)
     {
-        items.remove(item);
+        items.remove(name, item);
+    }
+    
+    /**
+     * Return a given item if it is in the room.
+     * @param name The name of the item
+     */
+    public Item getItem(String name)
+    {
+        return items.get(name);
+    }
+    
+    /**
+     * See if a given item is in the room
+     * @param name The name of the item
+     * @return true if item is in room, else false.
+     */
+    public boolean hasItem(String name)
+    {
+        return items.containsKey(name);
     }
     
     /**

@@ -9,21 +9,18 @@ import java.util.HashMap;
 public class Item
 {
     private boolean found;
-    private int weight;
+    private final int weight;
     private String name;
     private String details;
-    private Room room;
     private Item item;
-    private String person;
     
     /**
      * Constructor for objects of class Item
      */
-    public Item(String name, Room room, int weight)
+    public Item(String name, int weight)
     {
-        found = false;
+        found = true;
         this.name = name;
-        this.room = room;
         item = null;
         this.weight = weight;
     }
@@ -37,38 +34,14 @@ public class Item
         this.name = name;
         this.item = item;
         this.weight = weight;
-        room = this.item.getRoom();
     }
     
     /**
-     * Set the room the item is in.
-     * 
-     * @param room The room the item is located in.
+     *  Return the weight of an item
      */
-    public void addToRoom(Room room, Item item)
+    public int getWeight()
     {
-        this.room = room;
-        person = null;
-        room.addItem(item);
-    }
-    
-    /**
-     *  Add item to player inventory.
-     *  @param person The person inventory to add the item to.
-     *  @return true if item is added and false if item cannont
-     *      be added.
-     */
-    public boolean addToInventory(String person, Item item)
-    {
-       if(weight < 15) {
-            if(this.item == null) {
-               this.person = person;
-                room.removeItem(item);
-                room = null;
-                return true;
-            }
-       }
-       return false;
+       return weight;
     }
     
     /**
@@ -101,23 +74,5 @@ public class Item
     public String getName()
     {
         return name;
-    }
-    
-    /**
-     *  Return what room the item is in.
-     *  Returns null if the item is in an inventory.
-     */
-    public Room getRoom()
-    {
-        return room;
-    }
-    
-    /**
-     *  Return what room the item that the item
-     *  is in, is in. Yikes.
-     */
-    public Room getItemRoom()
-    {
-        return item.getRoom();
     }
 }
