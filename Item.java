@@ -13,6 +13,7 @@ public class Item
     private String name;
     private String details;
     private Room room;
+    private Item item;
     private String person;
     
     /**
@@ -22,8 +23,21 @@ public class Item
     {
         found = false;
         this.name = name;
-        this.weight = weight;
         this.room = room;
+        item = null;
+        this.weight = weight;
+    }
+    
+    /**
+     * Constructor for objects of class Item
+     */
+    public Item(String name, Item item, int weight)
+    {
+        found = false;
+        this.name = name;
+        this.item = item;
+        this.weight = weight;
+        room = this.item.getRoom();
     }
     
     /**
@@ -46,11 +60,13 @@ public class Item
      */
     public boolean addToInventory(String person, Item item)
     {
-       if(weight < 50) {
-            this.person = person;
-            room.removeItem(item);
-            room = null;
-            return true;
+       if(weight < 15) {
+            if(this.item == null) {
+               this.person = person;
+                room.removeItem(item);
+                room = null;
+                return true;
+            }
        }
        return false;
     }
@@ -94,5 +110,14 @@ public class Item
     public Room getRoom()
     {
         return room;
+    }
+    
+    /**
+     *  Return what room the item that the item
+     *  is in, is in. Yikes.
+     */
+    public Room getItemRoom()
+    {
+        return item.getRoom();
     }
 }

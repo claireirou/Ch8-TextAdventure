@@ -79,7 +79,7 @@ public class Room
      */
     public String getLookDescription()
     {
-        return lookDescription;
+        return lookDescription + "\n" + getExitString();
     }
     
     /**

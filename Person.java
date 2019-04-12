@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class Person
 {
     private ArrayList<Item> inventory;
-    private final int inventorySize;
+    private final int inventoryMax;
     private String name;
     private Room currentRoom;
     private Room nextRoom;
@@ -25,7 +25,7 @@ public class Person
     {
         this.name = name;
         inventory = new ArrayList<Item>();
-        this.inventorySize = inventorySize;
+        inventoryMax = inventorySize;
         currentRoom = startingRoom;
         previousRoom = null;
         currentRoom.visit();
@@ -37,7 +37,7 @@ public class Person
      */
     public void addItem(Item item)
     {
-        if(inventory.size() <= inventorySize) {
+        if(inventory.size() <= inventoryMax) {
             if(item.addToInventory(name, item)) {
                 inventory.add(item);
             } else {
@@ -53,7 +53,7 @@ public class Person
      * @param item The item to drop
      * @param currentRoom The room to drop the item in
      */
-    public void dropItem(Item item, Room currentRoom)
+    public void dropItem(Item item)
     {
         if(inventory.contains(item)) {
             inventory.remove(item);
@@ -86,8 +86,23 @@ public class Person
             } else {
                 currentRoom.visit();
                 System.out.println(currentRoom.getLookDescription());
-                System.out.println(currentRoom.getLongDescription());
             }
+        }
+    }
+    
+    /**
+     * Go back to the previous room.
+     */
+    public void goBack()
+    {
+        if(currentRoom.isLocked()) {
+            System.out.println("The door is locked!");
+        } else {
+            nextRoom = previousRoom;
+            previousRoom = currentRoom;
+            currentRoom = nextRoom;
+            nextRoom = null;
+            System.out.println(currentRoom.getLongDescription());
         }
     }
     
@@ -124,5 +139,43 @@ public class Person
     public String getName()
     {
         return name;
+    }
+    
+    /**
+     * Return inventory capacity.
+     */
+    public int getInventoryMax()
+    {
+        return inventoryMax;
+    }
+    
+    /**
+     * Return current inventory size.
+     */
+    public int getInventorySize()
+    {
+        return inventory.size();
+    }
+    
+    /**
+     * Give an item to another person. If the receiver's inventory is 
+     * full or the item is not in the giver's inventory print out error 
+     * message.
+     * @param item The item to give
+     * @param person The person to give the item to
+     */
+    public void giveItem(Item item, Person person)
+    {
+        if(inventory.contains(item)) {
+            if(person.getInventorySize() == person.getInventoryMax()) {
+                System.out.println("Inventory is full!");
+            } else {
+                inventory.remove(item);
+                person.addItem(item);
+                System.out.println("Item successfully given.");
+            }
+        } else {
+            System.out.println("You do not have this item.");
+        }
     }
 }

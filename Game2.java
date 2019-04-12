@@ -24,10 +24,16 @@ public class Game2
     private Room previousRoom;
     private String gameTitle;
     private Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, 
-            kitchen, upstairs, masterBedroom, childBedroom, closet,
-            basement, dining, lounge, exit, backyard;
+            kitchen, freezer, fridge, upstairs, masterBedroom, masterBath, childBedroom, 
+            closet, basement, dining, lounge, exit, backyard;
     private Person player,blake;
-    private Item placeholder;
+    private Item coffeeTable, desk, bookcase, fireplace, drinkingCart, bookshelves, windowSeat,
+            sideTable, cabinet, toilet, tiles, ovens, cupboards, crates, metalShelves, boxes, carcass,
+            table, vase, candle, bed, nightstand, tub, shower, jewelryBox, vanity, rug, bunkBed,
+            smallDesk, clothes, readingNook, book, woodShelves, mower,diningTable, 
+            plateSettings, candelabrum, cigarBox,drinkingCart2;
+    private Item canister, toolbox, basementKey, closetKey, blueprints, hammer, cigars, studyDrawer1, studyDrawer2,
+            childDrawer, nightDrawer, knife, freezerKey, kitchenKnife;
     private boolean wantToQuit;
     private boolean helped;
 
@@ -64,8 +70,11 @@ public class Game2
         library = new Room("in the library", false);
         bathroom = new Room("in the bathroom", false);
         kitchen = new Room("in the kitchen", false);
+        freezer = new Room("in the freezer", true);
+        fridge = new Room("in the refrigerator", false);
         upstairs = new Room("on the landing of the second floor", false);
         masterBedroom = new Room("in the master bedroom", false);
+        masterBath = new Room("in the master bathroom", false);
         childBedroom = new Room("in a child's bedroom", false);
         closet = new Room("in a closet", true);
         basement = new Room("in the basement", true);
@@ -101,12 +110,21 @@ public class Game2
         bathroom.setExit("main hall", hall);
         
         kitchen.setExit("main hall", hall);
+        kitchen.setExit("fridge", fridge);
+        kitchen.setExit("freezer", freezer);
+        
+        fridge.setExit("back", kitchen);
+        
+        freezer.setExit("back", kitchen);
         
         upstairs.setExit("downstairs", hall);
         upstairs.setExit("right", masterBedroom);
         upstairs.setExit("left", childBedroom);
         
+        masterBedroom.setExit("master bath", masterBath);
         masterBedroom.setExit("back", upstairs);
+        
+        masterBath.setExit("back", masterBedroom);
         
         childBedroom.setExit("back", upstairs);
         childBedroom.setExit("closet", closet);
@@ -132,28 +150,60 @@ public class Game2
                                 "\nthere is a staircase going up on the left and another door to the right of it.");
         hallRight.setLookDescription("The right wall of the hall has three doors on it. All of them are closed.");
         hallLeft.setLookDescription("The left wall of the hall has two closed doors and a set of double doors propped" +
-                                    "\nopen that lead to what appears to be a dining room");
-        hallForward.setLookDescription("To your left there is a large staircase to the upper floor and to the right," +
-                                    "\na single closed door.");
+                                "\nopen that lead to what appears to be a dining room");
+        hallForward.setLookDescription("At the back of the hall there is a large staircase to the upper floor to" +
+                                "\nyour left and to the right is a single closed door.");
         study.setLookDescription("You are in a study with an ornate wooden desk towards the back of the room. In the" +
                                 "\nmiddle of the room there are two couches facing each other with a glasstop coffee" +
                                 "\ntable between them. There is a fireplace along the left wall and the right wall" +
                                 "\nis lined with bookcases. You can see a small drinking cart to the left of the desk.");
         library.setLookDescription("You are in a library with floor to ceiling bookcases lining the walls. The back" +
-                                   "\nwall has a large window with a cozy looking window seat. In the center of the "+
-                                   "\nroom is a small couch and an armchair with a wooden side table next to it.");
-        bathroom.setLookDescription("");
-        kitchen.setLookDescription("");
-        upstairs.setLookDescription("");
-        masterBedroom.setLookDescription("");
-        childBedroom.setLookDescription("");
-        closet.setLookDescription("");
-        basement.setLookDescription("");
-        dining.setLookDescription("");
-        lounge.setLookDescription("");
+                                "\nwall has a large window with a cozy looking window seat. In the center of the "+
+                                "\nroom is a small couch and an armchair with a wooden side table next to it.");
+        bathroom.setLookDescription("You are in a small half bath with dark floor tiling and a toilet, a sink, and" +
+                                "\na medicine cabinet with a mirror door. Some of the tiles around the sink are" +
+                                "\ncracked and a little lifted.");
+        kitchen.setLookDescription("You are in a large kitchen with granite counters and dark wooden cupboards. An "+
+                                "\n oversized center island takes up a large portion of the space and on it sits" +
+                                "\na fruit bowl and a flower vase filled with peonies. Along the left wall are" +
+                                "\nthree ovens each with six-place stovetops. One of the stove tops has a large" +
+                                "\ncovered pot that appears to be simmering. The back wall has a large window with" +
+                                "\na wide sink below it. To your right are two large metal doors.");
+        fridge.setLookDescription("You are standing inside a walk-in refrigerator that is lined with shelves on all" +
+                                "\nthree walls. The shelves hold various crates filled with food and ingredients.");
+        freezer.setLookDescription("You are inside of a walk-in freezer. It is unbelievably cold. There are shelves" +
+                                "\nalong the right and back wall with boxes of food. There are two meat hooks " +
+                                "\nhanging from the ceiling, one of which has the carcass of some long dead animal." +
+                                "hooked onto it.");
+        upstairs.setLookDescription("You are on the landing of the second floor of the house. There's a door to your" +
+                                "\nleft and a bit down the hallway, there is a door on the right. On the left" +
+                                "\nside of the hallway there is a small table holding a decorative vase with a" +
+                                "\nlit candle next to it.");
+        masterBedroom.setLookDescription("You are in a master bedroom. There is a large four poster bed against the" +
+                                "\nleft wall with nightstands on both sides. There is a door to the master bath" +
+                                "\non the right.");
+        masterBath.setLookDescription("You are in the master bath. There is a clawfoot bathtub towards the back of" +
+                                "\nthe room and a shower stall off to the right. A sink and an extravegant vanity" +
+                                "\ntakes up the left wall. There is a small wooden jewelry box on the vanity.");
+        childBedroom.setLookDescription("You are in a child's bedroom. Most of the floor is covered by a large rug" +
+                                "\nThere is a small wooden desk to your left and a bunk bed in the far right" +
+                                "\ncorner. There is a closet door to the right");
+        closet.setLookDescription("The left wall of the closet is lined with hanging clothes. There are shelves on" +
+                                "\nthe right wall filled with more clothes. Tucked into the far right corner appears" +
+                                "\nto be a reading nook with pillows and a discarded book.");
+        basement.setLookDescription("You descend down a set of stairs into a sparse basement. It appears to serve" +
+                                "\nmainly as a storage space with shelves lining two of the walls and an old mower" +
+                                "sitting to the left of you.");
+        dining.setLookDescription("You are in a extravagant dinning room. The large table has ten plate settings "+
+                                "\nput out and a candelabrum center piece.");
+        lounge.setLookDescription("You are in a lounge with two large couches and two leather armchairs. There is a "+
+                                "\nside table next to one of the arm chairs with a cigar box on it. There is a" +
+                                "\ndrinking cart just to the left of the door.");
         exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion. To " +
                                  "\nthe left, you can see a gate that you assume leads to the backyard.");
-        backyard.setLookDescription("");
+        backyard.setLookDescription("You are in a inclosed side yard that streches the length of the house. There is" +
+                                "\na stone wall along the left side that closes off the space at the far end of the" +
+                                "\nof the yard. Towards the far edge of the house is a cellar door.");
     }
     
     /**
@@ -161,7 +211,65 @@ public class Game2
      */
     private void createItems()
     {
-        placeholder = new Item("placeholder", null, 0);
+        // create the items in rooms
+        coffeeTable = new Item("coffee table", study, 40); 
+        desk = new Item("desk", study, 90);
+        bookcase = new Item("bookcase", study, 100);
+        fireplace = new Item("fireplace", study, 1000);
+        drinkingCart = new Item("drinking cart", study, 50);
+        bookshelves = new Item("bookshelves", library, 100);
+        windowSeat = new Item("window seat", library, 1000);
+        sideTable = new Item("side table", library, 55);
+        cabinet = new Item("cabinet", bathroom, 55);
+        toilet = new Item("toilet", bathroom, 75);
+        tiles = new Item("tiles", bathroom, 1);
+        ovens = new Item("ovens", kitchen, 150);
+        cupboards = new Item("cupboards", kitchen, 100);
+        crates = new Item("crates", fridge, 20);
+        metalShelves = new Item("shelves", freezer, 30);
+        boxes = new Item("boxes", freezer, 20);
+        carcass = new Item("carcass", freezer, 25);
+        table = new Item("table", upstairs, 40);
+        vase = new Item("vase", upstairs, 15);
+        candle = new Item("candle", upstairs, 2);
+        bed = new Item("bed", masterBedroom, 100);
+        nightstand = new Item("nightstand", masterBedroom, 40);
+        tub = new Item("bathtub", masterBath, 100);
+        shower = new Item("shower", masterBath, 1000);
+        jewelryBox = new Item("jewelry box", masterBath, 5);
+        vanity = new Item("vanity", masterBath, 1000);
+        rug = new Item("rug", childBedroom, 15);
+        bunkBed = new Item("bunk bed", childBedroom, 60);
+        smallDesk = new Item("small desk", childBedroom, 30);
+        clothes = new Item("clothes", closet, 15);
+        readingNook = new Item("reading nook", closet, 1000);
+        book = new Item("book", closet, 3);
+        woodShelves = new Item("shelves", basement, 40);
+        mower = new Item("mower", basement, 150);
+        diningTable = new Item("dining table", dining, 100);
+        plateSettings = new Item("plate settings", dining, 20);
+        candelabrum = new Item("candelabrum", dining, 5);
+        cigarBox = new Item("cigar box", lounge, 5);
+        drinkingCart2 = new Item("drinking cart", lounge, 50);
+        
+        // create the items inside items
+        canister = new Item("canister tube", woodShelves, 5);
+        toolbox = new Item("toolbox", woodShelves, 10);
+        basementKey = new Item("gold key", nightDrawer, 1);
+        closetKey = new Item("bronze key", tiles, 1);
+        freezerKey = new Item("silver key", book, 1);
+        blueprints = new Item("blueprints", canister, 2);
+        hammer = new Item("hammer", toolbox, 5);
+        cigars = new Item("cigars", studyDrawer2, 3);
+        studyDrawer1 = new Item("top drawer", desk, 15);
+        studyDrawer2 = new Item("bottom drawer", desk, 15);
+        childDrawer = new Item("drawer", smallDesk, 10);
+        nightDrawer = new Item("drawer", nightstand, 15);
+        knife = new Item("steak knife", plateSettings, 4);
+        kitchenKnife = new Item("kitchen knife", cupboards, 4);
+        
+        
+        //TODO assign details
     }
     
     /**
@@ -288,7 +396,6 @@ public class Game2
         } else {
             System.out.println("Thank you for playing.  Good bye.");
         }
-        
         
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
