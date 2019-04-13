@@ -272,25 +272,25 @@ public class Game2
         drinkingCart2 = new Item("small table", 50, true, true);
 
         // put items inside items
-        woodShelves.add(canister);
-        woodShelves.add(toolbox);
-        canister.add(blueprints);
-        toolbox.add(hammer);
-        tiles.add(closetKey);
-        vase.add(freezerKey);
-        desk.add(studyDrawer1);
-        desk.add(studyDrawer2);
-        smallDesk.add(childDrawer);
-        rug.add(floorboard);
-        readingNook.add(book);
-        readingNook.add(backpack);
-        nightstand.add(nightDrawer);
-        studyDrawer2.add(cigars);
-        nightDrawer.add(basementKey);
-        plateSettings.add(knife);
-        cupboards.add(kitchenKnife);
-        cigarBox.add(placeholderKey);
-        floorboard.add(placeholderKey2);
+        fillContainer(woodShelves, canister);
+        fillContainer(woodShelves, toolbox);
+        fillContainer(canister, blueprints);
+        fillContainer(toolbox, hammer);
+        fillContainer(tiles, closetKey);
+        fillContainer(vase, freezerKey);
+        fillContainer(desk, studyDrawer1);
+        fillContainer(desk, studyDrawer2);
+        fillContainer(smallDesk, childDrawer);
+        fillContainer(rug, floorboard);
+        fillContainer(readingNook, book);
+        fillContainer(readingNook, backpack);
+        fillContainer(nightstand, nightDrawer);
+        fillContainer(studyDrawer2, cigars);
+        fillContainer(nightDrawer, basementKey);
+        fillContainer(plateSettings, knife);
+        fillContainer(cupboards, kitchenKnife);
+        fillContainer(cigarBox, placeholderKey);
+        fillContainer(floorboard, placeholderKey2);
 
         //TODO assign details
         coffeeTable.setDetails("");
@@ -351,6 +351,15 @@ public class Game2
         cigarBox.setDetails("");
         drinkingCart2.setDetails("");
         placeholderKey.setDetails("");
+    }
+    
+    /**
+     * Assign items to their containers
+     */
+    private void fillContainer(Item container, Item item)
+    {
+        container.add(item);
+        item.setContainer(container);
     }
     
     /**
@@ -777,6 +786,8 @@ public class Game2
 
         // Try to leave current room.
         player.goRoom(direction);
+        
+        //TODO remove person from room hashMap
     }
     
     /**
@@ -823,8 +834,14 @@ public class Game2
         }
         
         //TODO the actual use part
+        Item item = player.getItem(itemName);
+        if(item != null) {
+            
+        } else {
+            System.out.println("Item not in inventory.");
+        }
         /*
-         * if return null, item not in room or inventory, fail.
+         * if return null, item in inventory, fail.
          * if item found is false, fail.
          * switch (item) case:
          *      if not in right room, fail.
@@ -879,7 +896,7 @@ public class Game2
             itemName = command.getSecondWord() + " " + command.getThirdWord();
         }
         
-        //TODO add the take part
+        player.takeItem(itemName);
     }
 
     /** 

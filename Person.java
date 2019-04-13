@@ -19,6 +19,15 @@ public class Person
     private Room previousRoom;
     private int decked;
     
+    
+    
+    //TODO show inventory
+    
+    
+    
+    
+    
+    
     /**
      * Constructor for objects of class Person
      * @param name The name of the person
@@ -38,34 +47,31 @@ public class Person
     }
     
     /**
-     * Add an item to inventory.
-     * @param itemName The name of the item to add
+     * Take an item from the room.
+     * @param itemName The name of the item to take
      */
-    public void addItem(String itemName, Item item)
+    public void takeItem(String itemName)
     {
         if(currentRoom.hasItem(itemName)) {
+            Item item = currentRoom.getItem(itemName);
+            
             if(itemName.equals("backpack")) {
                 inventoryMax += 20;
                 System.out.println("You have found a backpack! You can now carry more items");
                 System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
                 return;
+            } 
+            
+            if(addItem(itemName, item)) {
+                // Item was successfully added
+                currentRoom.removeItem(itemName, item);     // remove from room
+                System.out.println("Item added to inventory.");
             }
             
-            if(item.getWeight() >= 50) {
-                System.out.println("You are too weak to carry this item.");
-            } else {
-                if((item.getWeight() + inventoryWeight) <= inventoryMax) {
-                    inventory.put(itemName, item);
-                    inventoryWeight += item.getWeight();
-                    System.out.println("Item added to inventory.");
-                } else {
-                    System.out.println("You cannot carry anymore.");
-                    System.out.println("This item weighs " + item.getWeight() + "lbs");
-                }
-                System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
-            }
+            // Print out inventory weight
+            System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
         } else {
-            System.out.println("No such item in the room.");
+            System.out.println("This item is not in the room.");
         }
     }
     
@@ -92,6 +98,49 @@ public class Person
     }
     
     /**
+     * Try to examine an item. If the item is not in the room,
+     * print an error message, otherwise print item details.
+     * @param itemName The item to examine
+     */
+    public void examineItem(String itemName)
+    {
+        if(currentRoom.hasItem(itemName) && currentRoom.getItem(name).isFound()) {
+            //Item is in the room and has been found
+            Item item = currentRoom.getItem(itemName);
+            System.out.println(item.getDetails());
+            item.findItems();       //Find the items inside the item if any
+        } else if(inventory.containsKey(itemName)){
+            
+            System.out.println(inventory.get(itemName).getDetails());
+        } else {
+            System.out.println("This item is not in the room.");
+        }
+    }
+    
+    /**
+     * Give an item to another person. If the receiver's inventory is 
+     * full or the item is not in the giver's inventory print out error 
+     * message.
+     * @param itemName The name of the item to give
+     * @param person The person to give the item to
+     */
+    public void giveItem(String itemName, Person person)
+    {
+        if(inventory.containsKey(itemName)) {
+            Item item = inventory.get(itemName);
+            if((person.getInventorySize() + item.getWeight()) >= person.getInventoryMax()) {
+                System.out.println("Inventory is full! Item not given.");
+            } else {
+                removeItem(itemName, item);
+                person.addItem(itemName, item);
+                System.out.println("Item successfully given.");
+            }
+        } else {
+            System.out.println("Item not in inventory.");
+        }
+    }
+    
+    /**
      * Try to go in one direction. If there is an exit, enter the new
      * room, otherwise print an error message.
      * @param direction The exit direction for the new room.
@@ -102,8 +151,8 @@ public class Person
         if (nextRoom == null) {
             System.out.println("You cannot go that way!");
         } else if (nextRoom.isLocked()) {
-              System.out.println("The door is locked.");
-              nextRoom = null;
+            System.out.println("The door is locked.");
+            nextRoom = null;
         } else {
             previousRoom = currentRoom;
             currentRoom = nextRoom;
@@ -114,42 +163,6 @@ public class Person
                 currentRoom.visit();
                 System.out.println(currentRoom.getLookDescription());
             }
-        }
-    }
-    
-    /**
-     * Try to examine an item. If the item is not in the room,
-     * print an error message, otherwise print item details.
-     * @param itemName The item to examine
-     */
-    public void examineItem(String itemName)
-    {
-        if(currentRoom.hasItem(itemName)) {
-            Item item = currentRoom.getItem(itemName);
-            System.out.println(item.getDetails());
-        } else if(inventory.containsKey(itemName)){
-            Item item = inventory.get(itemName);
-            System.out.println(item.getDetails());
-        } else {
-            System.out.println("This item is not in the room.");
-        }
-    }
-    
-    /**
-     * Return the item we are trying to use. 
-     * If the item is not in inventory or in the room
-     *      return null, otherwise return the item.
-     * @param itemName The name of the item we want
-     * @return the item object we want to use
-     */
-    public Item useItem(String itemName)
-    {
-        if(inventory.containsKey(itemName)) {
-            return inventory.get(itemName);
-        } else if(currentRoom.hasItem(itemName)) {
-            return currentRoom.getItem(itemName);
-        } else {
-            return null;
         }
     }
     
@@ -169,6 +182,18 @@ public class Person
         }
     }
     
+    /**
+     * Return item if it is in inventory. 
+     * If the item is not in inventory return null, 
+     *      otherwise return the item.
+     * @param itemName The name of the item we want
+     * @return the item object we want to use
+     */
+    public Item getItem(String itemName)
+    {
+            return inventory.get(itemName);
+    }
+
     /**
      *  Move NPC to new room.
      *  @param room The room to move the NPC to.
@@ -219,27 +244,28 @@ public class Person
     {
         return inventoryWeight;
     }
-    
+
     /**
-     * Give an item to another person. If the receiver's inventory is 
-     * full or the item is not in the giver's inventory print out error 
-     * message.
-     * @param itemName The name of the item to give
-     * @param person The person to give the item to
+     * Try to add an item to inventory.
+     * @param itemName The name of the item to add
+     * @return true if item was successfully added,
+     *      else return false
      */
-    public void giveItem(String itemName, Person person)
+    private boolean addItem(String itemName, Item item)
     {
-        if(inventory.containsKey(itemName)) {
-            Item item = inventory.get(itemName);
-            if((person.getInventorySize() + item.getWeight()) >= person.getInventoryMax()) {
-                System.out.println("Inventory is full! Item not given.");
-            } else {
-                removeItem(itemName, item);
-                person.addItem(itemName, item);
-                System.out.println("Item successfully given.");
-            }
+        if(item.getWeight() >= 50) {
+            System.out.println("You are too weak to carry this item.");
+            return false;
         } else {
-            System.out.println("You do not have this item.");
+            if((item.getWeight() + inventoryWeight) <= inventoryMax) {
+                inventory.put(itemName, item);          // add to inventory
+                inventoryWeight += item.getWeight();    //adjust inventory weight
+                return true;
+            } else {
+                System.out.println("You cannot carry anymore.");
+                System.out.println("This item weighs " + item.getWeight() + "lbs");
+                return false;
+            }   
         }
     }
     
