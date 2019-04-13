@@ -24,8 +24,8 @@ public class Room
     private String lookDescription;
     private boolean visited;
     private boolean locked;
-    private HashMap<String, Item> items;
-    private ArrayList<Person> characters;
+    private HashMap<String, Item> items;        // stores items in this room.
+    private HashMap<String, Person> people;     // stores people in this room.
 
     /**
      * Create a room described "description". Initially, it has
@@ -39,7 +39,7 @@ public class Room
         this.locked = locked;
         exits = new HashMap<String, Room>();
         items = new HashMap<String, Item>();
-        characters = new ArrayList<Person>();
+        people = new HashMap<String, Person>();
         visited = false;
     }
 
@@ -136,7 +136,9 @@ public class Room
     }
     
     /**
-     * Add item in the room to ArrayList
+     * Add item to the room
+     * @param name The name of the item to add
+     * @param item The item object to add
      */
     public void addItem(String name, Item item)
     {
@@ -145,6 +147,8 @@ public class Room
     
     /**
      * Remove an item from the room.
+     * @param name The name of the item to remove
+     * @param item The item object to remove
      */
     public void removeItem(String name, Item item)
     {
@@ -154,6 +158,7 @@ public class Room
     /**
      * Return a given item if it is in the room.
      * @param name The name of the item
+     * @return the item
      */
     public Item getItem(String name)
     {
@@ -171,6 +176,46 @@ public class Room
     }
     
     /**
+     * Add a person to the room
+     * @param name The name of the person to add
+     * @param item The person object to add
+     */
+    public void addPerson(String name, Person person)
+    {
+        people.put(name, person);
+    }
+    
+    /**
+     * Remove a person from the room
+     * @param name The name of the person to remove
+     * @param item The person object to remove
+     */
+    public void removePerson(String name, Person person)
+    {
+        people.remove(name, person);
+    }
+    
+    /**
+     * Return a given person if they are in the room.
+     * @param name The name of the person
+     * @return the person
+     */
+    public Person getPerson(String name)
+    {
+        return people.get(name);
+    }
+    
+    /**
+     * See if a given person is in the room.
+     * @param name The name of the person
+     * @return true if person is in the room, else false
+     */
+    public boolean hasPerson(String name)
+    {
+        return people.containsKey(name);
+    }
+    
+    /**
      * Change a room's status to visited
      */
     public void visit()
@@ -180,7 +225,7 @@ public class Room
     
     /**
      * Get the room's locked status
-     * @return true, if the room is locked, false if it isn't
+     * @return true if the room is locked, false if it isn't
      */
     public boolean isLocked()
     {

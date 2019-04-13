@@ -17,6 +17,7 @@ public class Person
     private Room currentRoom;
     private Room nextRoom;
     private Room previousRoom;
+    private int decked;
     
     /**
      * Constructor for objects of class Person
@@ -32,6 +33,7 @@ public class Person
         currentRoom = startingRoom;
         previousRoom = null;
         inventoryWeight = 0;
+        decked = 0;
         currentRoom.visit();
     }
     
@@ -112,6 +114,42 @@ public class Person
                 currentRoom.visit();
                 System.out.println(currentRoom.getLookDescription());
             }
+        }
+    }
+    
+    /**
+     * Try to examine an item. If the item is not in the room,
+     * print an error message, otherwise print item details.
+     * @param itemName The item to examine
+     */
+    public void examineItem(String itemName)
+    {
+        if(currentRoom.hasItem(itemName)) {
+            Item item = currentRoom.getItem(itemName);
+            System.out.println(item.getDetails());
+        } else if(inventory.containsKey(itemName)){
+            Item item = inventory.get(itemName);
+            System.out.println(item.getDetails());
+        } else {
+            System.out.println("This item is not in the room.");
+        }
+    }
+    
+    /**
+     * Return the item we are trying to use. 
+     * If the item is not in inventory or in the room
+     *      return null, otherwise return the item.
+     * @param itemName The name of the item we want
+     * @return the item object we want to use
+     */
+    public Item useItem(String itemName)
+    {
+        if(inventory.containsKey(itemName)) {
+            return inventory.get(itemName);
+        } else if(currentRoom.hasItem(itemName)) {
+            return currentRoom.getItem(itemName);
+        } else {
+            return null;
         }
     }
     

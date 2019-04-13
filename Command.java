@@ -22,6 +22,7 @@ public class Command
     private CommandWord commandWord;
     private String secondWord;
     private String thirdWord;
+    private String fourthWord;
 
     /**
      * Create a command object. First and second words must be supplied, but
@@ -30,11 +31,12 @@ public class Command
      *                  was not recognised.
      * @param secondWord The second word of the command. May be null.
      */
-    public Command(CommandWord commandWord, String secondWord, String thirdWord)
+    public Command(CommandWord commandWord, String secondWord, String thirdWord, String fourthWord)
     {
         this.commandWord = commandWord;
         this.secondWord = secondWord;
         this.thirdWord = thirdWord;
+        this.fourthWord = fourthWord;
     }
 
     /**
@@ -56,12 +58,21 @@ public class Command
     }
     
     /**
-     * @return The second word of this command. Returns null if there was no
+     * @return The third word of this command. Returns null if there was no
      * third word
      */
     public String getThirdWord()
     {
         return thirdWord;
+    }
+    
+    /**
+     * @return The fourth word of this command. Returns null if there was no
+     * fourth word
+     */
+    public String getFourthWord()
+    {
+        return fourthWord;
     }
 
     /**
@@ -86,6 +97,14 @@ public class Command
     public boolean hasThirdWord()
     {
         return (thirdWord != null);
+    }
+    
+    /**
+     * @return true if the command has a fourth word.
+     */
+    public boolean hasFourthWord()
+    {
+        return (fourthWord != null);
     }
 }
 

@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Write a description of class Item here.
@@ -9,31 +10,22 @@ import java.util.HashMap;
 public class Item
 {
     private boolean found;
+    private final boolean usable;
     private final int weight;
     private String name;
     private String details;
-    private Item item;
+    private ArrayList<Item> items;
     
     /**
      * Constructor for objects of class Item
      */
-    public Item(String name, int weight)
+    public Item(String name, int weight, boolean found, boolean usable)
     {
-        found = true;
+        items = new ArrayList<Item>();
+        this.found = found;
         this.name = name;
-        item = null;
         this.weight = weight;
-    }
-    
-    /**
-     * Constructor for objects of class Item
-     */
-    public Item(String name, Item item, int weight)
-    {
-        found = false;
-        this.name = name;
-        this.item = item;
-        this.weight = weight;
+        this.usable = usable;
     }
     
     /**
@@ -63,7 +55,7 @@ public class Item
     /**
      *  Return a string description of item.
      */
-    public String examine()
+    public String getDetails()
     {
         return details;
     }
@@ -74,5 +66,23 @@ public class Item
     public String getName()
     {
         return name;
+    }
+    
+    /**
+     * Return item useable status
+     */
+    public boolean getUse()
+    {
+        return usable;
+    }
+    
+    /**
+     * Add an item inside another item.
+     *      e.g. Add key inside of box
+     * @param item The item to be added inside
+     */
+    public void add(Item item) 
+    {
+        items.add(item);
     }
 }
