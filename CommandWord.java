@@ -12,7 +12,7 @@ public enum CommandWord
     GO("go"), QUIT("quit"), HELP("help"), UNKNOWN("?"),
     LOOK("look"), TAKE("take"), EXAMINE("examine"),
     USE("use"), GIVE("give"), YES("yes"), NO("no"),
-    TALK("talk");
+    TALK("talk"), DROP("drop"), INVENTORY("inventory");
     
     
     // The command string.

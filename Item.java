@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class Item
 {
     private boolean found;
-    private final boolean usable;
     private boolean locked;
     private final int weight;
     private String name;
@@ -21,14 +20,13 @@ public class Item
     /**
      * Constructor for objects of class Item
      */
-    public Item(String name, int weight, boolean found, boolean usable)
+    public Item(String name, int weight, boolean found)
     {
         items = new ArrayList<Item>();
         container = null;
         this.found = found;
         this.name = name;
         this.weight = weight;
-        this.usable = usable;
         locked = false;
     }
     
@@ -70,15 +68,6 @@ public class Item
     public String getName()
     {
         return name;
-    }
-    
-    /**
-     * Return item usable status.
-     * @return true if item can be used, else false
-     */
-    public boolean getUse()
-    {
-        return usable;
     }
     
     /**

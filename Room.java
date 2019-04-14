@@ -84,7 +84,7 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "You are " + name + ".\n" + getExitString();
+        return "You are " + name + ".\n" + getItemString() + getExitString();
     }
     
     /**
@@ -93,7 +93,7 @@ public class Room
      */
     public String getLookDescription()
     {
-        return lookDescription + "\n" + getExitString();
+        return lookDescription + "\n" + getItemString() + getExitString();
     }
     
     /**
@@ -116,7 +116,7 @@ public class Room
 
     /**
      * Return a string describing the room's exits, for example
-     * "Exits: north west".
+     * "Exits: - north - west -".
      * @return Details of the room's exits.
      */
     private String getExitString()
@@ -124,9 +124,32 @@ public class Room
         String returnString = "Exits:";
         Set<String> keys = exits.keySet();
         for(String exit : keys) {
-            returnString += " " + exit + ",";
+            returnString += " - " + exit;
         }
-        return returnString;
+        return returnString + " -";
+    }
+    
+    /**
+     * Return a string descripting the items in the room.
+     * Example:     "Items in room: - painting - desk -"
+     * @return Details of the room's items.
+     */
+    private String getItemString()
+    {
+        if(!items.isEmpty()) {
+            String returnString = "Items in room:";
+            Set<String> keys = items.keySet();
+            for(String itemName : keys) {
+                if(items.get(itemName).isFound()) {
+                    returnString += " - " + itemName;
+                } else {
+                    continue;
+                }
+            }
+            return returnString + " -\n";
+        } else {
+            return "";
+        }
     }
 
     /**

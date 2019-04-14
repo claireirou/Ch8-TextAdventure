@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Write a description of class Person here.
@@ -47,7 +48,6 @@ public class Person
         decked = 0;
         dirty = false;
         conscious = true;
-        currentRoom.visit();
     }
     
     /**
@@ -56,6 +56,7 @@ public class Person
      */
     public void takeItem(String itemName)
     {
+        System.out.println();
         if(currentRoom.hasItem(itemName)) {
             Item item = currentRoom.getItem(itemName);
             if(item.isFound()) {
@@ -88,6 +89,7 @@ public class Person
      */
     public void dropItem(String itemName)
     {
+        System.out.println();
         if(itemName.equals("backpack")) {
             System.out.println("You cannot drop this item.");
             return;
@@ -121,16 +123,21 @@ public class Person
      */
     public void examineItem(String itemName)
     {
-        if(currentRoom.hasItem(itemName) && currentRoom.getItem(name).isFound()) {
+        Item item = currentRoom.getItem(itemName);
+        System.out.println();
+        if(item != null && item.isFound()) {
             //Item is in the room and has been found
-            Item item = currentRoom.getItem(itemName);
+            //Item item = currentRoom.getItem(itemName);
             System.out.println(item.getDetails());
             
             if(!item.isLocked()) {
                 // Item is not locked
                 item.findItems();       //Find any items inside the item.
+            } else if(itemName.equals("candelabrum")) {
+                System.out.println("It's unlit");
+            } else if(!itemName.equals("cigar box")) {
+                System.out.println("It's locked.");
             }
-            
         } else if(inventory.containsKey(itemName)){
             System.out.println(inventory.get(itemName).getDetails());
         } else {
@@ -148,6 +155,7 @@ public class Person
      */
     public void giveItem(String itemName, Person person)
     {
+        System.out.println();
         if(inventory.containsKey(itemName)) {
             Item item = inventory.get(itemName);
             if((person.getInventorySize() + item.getWeight()) >= person.getInventoryMax()) {
@@ -163,6 +171,20 @@ public class Person
     }
     
     /**
+     * Print out inventory details.
+     */
+    public void showInventory()
+    {
+        Set <String> keys = inventory.keySet();
+        System.out.println("_____________________________________");
+        System.out.println("Inventory: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
+        for(String item : keys) {
+            System.out.println(item + ": " + inventory.get(item).getWeight() + "lbs");
+        }
+        System.out.println("_____________________________________");
+    }
+    
+    /**
      * Try to go in one direction. If there is an exit, enter the new
      * room, otherwise print an error message.
      * @param direction The exit direction for the new room.
@@ -170,6 +192,7 @@ public class Person
     public void goRoom(String direction)
     {
         nextRoom = currentRoom.getExit(direction);
+        System.out.println();
         if (nextRoom == null) {
             System.out.println("You cannot go that way!");
         } else if (nextRoom.isLocked()) {
@@ -196,6 +219,7 @@ public class Person
      */
     public void goBack()
     {
+        System.out.println();
         if(currentRoom.isLocked()) {
             System.out.println("The door is locked!");
         } else {
@@ -212,6 +236,7 @@ public class Person
      */
     public void eat()
     {
+        System.out.println();
         decked -= 5;
         System.out.println("It's delicious and you feel better.");
         if(decked < 0) {
@@ -224,6 +249,7 @@ public class Person
      */
     public void sleep()
     {
+        System.out.println();
         decked -= 10;
         System.out.println("You wake up. You're not sure how much time has passed, but you feel much better.");
         if(decked < 0) {
@@ -236,8 +262,9 @@ public class Person
      */
     public void useCarcass()
     {
+        System.out.println();
         System.out.println("You examine the carcass more closely; searching inside of it to make sure there's nothing " +
-                           "\nthere. You find nothing. Your arms and clothes are covered in gross meat-stuff.");
+                           "\nthere. You find nothing. Your arms and clothes are covered in blood and gross meat-stuff.");
         dirty = true;
     }
     
@@ -246,6 +273,7 @@ public class Person
      */
     public void takeBath()
     {
+        System.out.println();
         decked -= 2;
         dirty = false;
         System.out.println("You are now squeaky clean and you feel marginally better after your hour long bath.");
@@ -259,6 +287,7 @@ public class Person
      */
     public void shower()
     {
+        System.out.println();
         decked -= 5;
         dirty = false;
         System.out.println("You've quickly and effeciently showered. You feel a bit better, too.");
@@ -272,6 +301,7 @@ public class Person
      */
     public void attack()
     {
+        System.out.println();
         decked += 10;
         dirty = true;
         if(decked >= 30) {
