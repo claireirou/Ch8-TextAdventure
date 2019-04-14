@@ -11,6 +11,7 @@ public class Item
 {
     private boolean found;
     private final boolean usable;
+    private boolean locked;
     private final int weight;
     private String name;
     private String details;
@@ -28,6 +29,7 @@ public class Item
         this.name = name;
         this.weight = weight;
         this.usable = usable;
+        locked = false;
     }
     
     /**
@@ -71,7 +73,7 @@ public class Item
     }
     
     /**
-     * Return item useable status.
+     * Return item usable status.
      * @return true if item can be used, else false
      */
     public boolean getUse()
@@ -95,6 +97,34 @@ public class Item
     public void setContainer(Item container)
     {
         this.container = container;
+    }
+    
+    /**
+     * Lock an item.
+     */
+    public void lock()
+    {
+        locked = true;
+    }
+    
+    /**
+     * Unlock an item. If item has items in it,
+     * print those items' details.
+     */
+    public void unlock()
+    {
+        locked = false;
+        findItems();
+    }
+    
+    /**
+     * Return lock status
+     * @return true if an item is locked, otherwise
+     *      return false
+     */
+    public boolean isLocked()
+    {
+        return locked;
     }
     
     /**
@@ -142,7 +172,7 @@ public class Item
     {
         if(!items.isEmpty()) {
             //Item has items in it.
-            System.out.println("Inside the " + getName() + " there is: ");
+            System.out.println("Inside there is: ");
             for(Item item : items) {
                 item.found();                                   // Find the items inside
                 System.out.println("\t" + item.getDetails());   // Print their details  

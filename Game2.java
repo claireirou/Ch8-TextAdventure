@@ -24,17 +24,17 @@ public class Game2
     private Room previousRoom;
     private String gameTitle;
     private Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, kitchen, freezer, fridge, 
-            upstairs, masterBedroom, masterBath, childBedroom, closet, basement, dining, lounge, exit, backyard;
-    private Person player, blake, ruby, olive, ash, cole, ginger, jett;
+            upstairs, masterBedroom, masterBath, childBedroom, closet, basement, dining, lounge, exit, backyard,
+            dummyRoom1, dummyRoom2;
+    private Person player, blake, ruby, olive, ash, cole;
     private Item coffeeTable, desk, bookcase, fireplace, drinkingCart, bookshelves, windowSeat, sideTable, 
             cabinet, toilet, tiles, ovens, stovetop, pot, cupboards, crates, metalShelves, boxes, carcass,
             table, vase, candle, bed, nightstand, tub, shower, jewelryBox, vanity, rug, floorboard, bunkBed,
             smallDesk, clothes, readingNook, book, woodShelves, mower, diningTable, plateSettings, candelabrum, 
-            cigarBox,drinkingCart2;
-    private Item canister, toolbox, basementKey, closetKey, blueprints, hammer, cigars, studyDrawer1, studyDrawer2, 
-            childDrawer, nightDrawer, knife, freezerKey, kitchenKnife, placeholderKey, placeholderKey2, backpack;
+            cigarBox,drinkingCart2, painting;
+    private Item canister, toolbox, closetKey, blueprints, hammer, cigars, studyDrawer1, studyDrawer2, 
+            childDrawer, nightDrawer, knife, fridgeKey, kitchenKnife, drawerKey, toolboxKey, backpack;
     private boolean wantToQuit;
-    private boolean helped;
 
     /**
      * Create the game and initialise its internal map, items
@@ -70,7 +70,7 @@ public class Game2
         bathroom = new Room("in the bathroom", false);
         kitchen = new Room("in the kitchen", false);
         freezer = new Room("in the freezer", true);
-        fridge = new Room("in the refrigerator", false);
+        fridge = new Room("in the refrigerator", true);
         upstairs = new Room("on the landing of the second floor", false);
         masterBedroom = new Room("in the master bedroom", false);
         masterBath = new Room("in the master bathroom", false);
@@ -81,6 +81,8 @@ public class Game2
         lounge = new Room("in the lounge", false);
         exit = new Room("in the front yard", false);
         backyard = new Room("in the back yard", false);
+        dummyRoom1 = new Room("", true);
+        dummyRoom2 = new Room(" ", true);
         
         // initialise room exits
         hall.setExit("left", hallLeft);
@@ -94,7 +96,7 @@ public class Game2
         
         hallLeft.setExit("left door", lounge);
         hallLeft.setExit("dining room", dining);
-        hallLeft.setExit("right door", basement);
+        hallLeft.setExit("right door", dummyRoom2);
         hallLeft.setExit("back", hall);
         
         hallRight.setExit("left door", bathroom);
@@ -109,7 +111,7 @@ public class Game2
         bathroom.setExit("main hall", hall);
         
         kitchen.setExit("fridge", fridge);
-        kitchen.setExit("freezer", freezer);
+        kitchen.setExit("freezer", dummyRoom1);
         kitchen.setExit("main hall", hall);
         
         fridge.setExit("back", kitchen);
@@ -143,6 +145,10 @@ public class Game2
         backyard.setExit("cellar door", basement);
         backyard.setExit("gate", exit);
         
+        //Block secret passages
+        basement.blocked(true);
+        freezer.blocked(true);
+        
         //assign detailed room description
         hall.setLookDescription("You are in a grand hall with marble flooring and a tall ceiling. you can see multiple" +
                                 "\ndoors lining the walls on both the left and right side. At the back of the hall" +
@@ -168,12 +174,15 @@ public class Game2
                                 "\nthree ovens each with six-place stovetops. One of the stovetops has a large" +
                                 "\ncovered pot that appears to be simmering. The back wall has a large window with" +
                                 "\na wide sink below it. To your right are two large metal doors with silver handles.");
-        fridge.setLookDescription("You are standing inside a walk-in refrigerator that is lined with shelves on all" +
-                                "\nthree walls. The shelves hold various crates filled with food and ingredients.");
-        freezer.setLookDescription("You are inside of a walk-in freezer. It is unbelievably cold. There are shelves" +
-                                "\nalong the right and back wall with boxes of food. There are two meat hooks " +
-                                "\nhanging from the ceiling, one of which has the carcass of some long dead animal." +
-                                "hooked onto it.");
+        fridge.setLookDescription("You are standing inside a walk-in refrigerator that is lined with shelves on two " +
+                                "\nsides. The shelves hold various crates filled with food and ingredients. There are" +
+                                "\ntwo meat hooks hanging from the ceiling, one of which has the carcass of some long " +
+                                "\ndead animal hooked onto it.");
+        freezer.setLookDescription("You walk down a narrow passage way. At the end of it is a crude door. You push open "+
+                                "the door and you are inside of a walk-in freezer. It is unbelievably cold. There are " +
+                                "\nshelves along the walls in front and to the left of you with boxes of food. The door " +
+                                "\nto the freezer is on the wall to your right and has been soldered shut. Just past it " +
+                                "\nin the far corner, you can see Mr. Bodie's body.");
         upstairs.setLookDescription("You are on the landing of the second floor of the house. There's a door to your" +
                                 "\nleft and a bit down the hallway, there is a door on the right. On the left" +
                                 "\nside of the hallway there is a small table holding a decorative vase with a" +
@@ -190,14 +199,18 @@ public class Game2
         closet.setLookDescription("The left wall of the closet is lined with hanging clothes. There are shelves on" +
                                 "\nthe right wall filled with more clothes. Tucked into the far right corner appears" +
                                 "\nto be a reading nook with pillows and a discarded book.");
-        basement.setLookDescription("You descend down a set of stairs into a sparse basement. It appears to serve" +
-                                "\nmainly as a storage space with shelves lining two of the walls and an old mower" +
-                                "sitting to the left of you.");
+        basement.setLookDescription("You walk down a narrow set of stairs and down a small passageway. At the end there " +
+                                "\nis a ladder leading up to a hatch door. You climb the ladder and you are in a sparse " +
+                                "\nbasement. It appears to serve mainly as a storage space with wooden shelves lining " +
+                                "\ntwo of the walls and an old mower sitting to the left of you. On the far right of the " +
+                                "\nroom is a set of stairs that heads back up to the main hall. Past the mower is another " +
+                                "set of stairs that heads to a cellar door.");
         dining.setLookDescription("You are in a extravagant dinning room. The large table has ten plate settings "+
-                                "\nput out and a candelabrum center piece.");
+                                "\nput out and an unlit candelabrum center piece.");
         lounge.setLookDescription("You are in a lounge with two large couches and two leather armchairs. There is a "+
                                 "\nside table next to one of the arm chairs with a cigar box on it. There is a" +
-                                "\nsmall table that serves as a drinking cart just to the left of the door.");
+                                "\nsmall table that serves as a drinking cart just to the left of the door and a large "+
+                                "\npainting is hanging on the far side of the right wall.");
         exit.setLookDescription("You are outside in a courtyard, and in front of you stands an opulent mansion. To " +
                                  "\nthe left, you can see a gate that you assume leads to the backyard.");
         backyard.setLookDescription("You are in a inclosed side yard that streches the length of the house. There is" +
@@ -216,12 +229,12 @@ public class Game2
         studyDrawer1 = new Item("top drawer", 15, false, false);
         studyDrawer2 = new Item("bottom drawer", 15, false, false);
         cigars = new Item("cigars", 3, false, true);
-        bookcase = new Item("bookcase", 100, true, true);
+        bookcase = new Item("bookcase", 100, true, false);
         fireplace = new Item("fireplace", 1000, true, false);
         drinkingCart = new Item("drinking cart", 50, true, false);
-        bookshelves = new Item("bookshelves", 100, true, false);
+        bookshelves = new Item("bookshelves", 100, false, false);
         windowSeat = new Item("window seat", 1000, true, false);
-        sideTable = new Item("side table", 55, true, true);
+        sideTable = new Item("side table", 55, true, false);
         cabinet = new Item("cabinet", 55, true, false);
         toilet = new Item("toilet", 75, true, false);
         tiles = new Item("tiles", 1, true, false);
@@ -232,24 +245,24 @@ public class Game2
         cupboards = new Item("cupboards", 100, true, false);
         kitchenKnife = new Item("kitchen knife", 4, false, true);
         crates = new Item("crates", 20, true, false);
-        metalShelves = new Item("shelves", 30, true, true);
+        metalShelves = new Item("shelves", 30, true, false);
         boxes = new Item("boxes", 20, true, false);
         carcass = new Item("carcass", 25, true, true);
         table = new Item("table", 40, true, false);
         vase = new Item("vase", 15, true, false);
         candle = new Item("candle", 2, true, true);
-        freezerKey = new Item("silver key", 1, false, true);
+        fridgeKey = new Item("silver key", 1, false, true);
         bed = new Item("bed", 100, true, true);
         nightstand = new Item("nightstand", 40, true, false);
         nightDrawer = new Item("drawer", 15, false, false);
-        basementKey = new Item("gold key", 1, false, true);
+        drawerKey = new Item("gold key", 1, false, true);
         tub = new Item("bathtub", 100, true, true);
         shower = new Item("shower", 1000, true, true);
         jewelryBox = new Item("jewelry box", 5, true, false);
         vanity = new Item("vanity", 1000, true, false);
         rug = new Item("rug", 15, true, true);
         floorboard = new Item("floorboard", 10, false, true);
-        placeholderKey2 = new Item("placeholder2", 1, false, true);
+        toolboxKey = new Item("small key", 1, false, true);
         bunkBed = new Item("bunk bed", 60, true, false);
         smallDesk = new Item("small desk", 30, true, false);
         childDrawer = new Item("drawer", 10, false, false);
@@ -261,23 +274,22 @@ public class Game2
         mower = new Item("mower", 150, true, false);
         canister = new Item("canister tube", 5, false, false);
         toolbox = new Item("toolbox", 10, false, false);
-        blueprints = new Item("blueprints", 2, false, true);
+        blueprints = new Item("blueprints", 2, false, false);
         hammer = new Item("hammer", 5, false, true);
         diningTable = new Item("dining table", 100, true, false);
         plateSettings = new Item("plate settings", 20, true, false);
         knife = new Item("steak knife", 4, false, true);
         candelabrum = new Item("candelabrum", 5, true, true);
         cigarBox = new Item("cigar box", 5, true, false);
-        placeholderKey = new Item("placeholder", 1, false, true);
-        drinkingCart2 = new Item("small table", 50, true, true);
+        drinkingCart2 = new Item("small table", 50, true, false);
+        painting = new Item("painting", 50, true, false);
 
         // put items inside items
-        fillContainer(woodShelves, canister);
         fillContainer(woodShelves, toolbox);
         fillContainer(canister, blueprints);
         fillContainer(toolbox, hammer);
         fillContainer(tiles, closetKey);
-        fillContainer(vase, freezerKey);
+        fillContainer(vase, fridgeKey);
         fillContainer(desk, studyDrawer1);
         fillContainer(desk, studyDrawer2);
         fillContainer(smallDesk, childDrawer);
@@ -285,12 +297,20 @@ public class Game2
         fillContainer(readingNook, book);
         fillContainer(readingNook, backpack);
         fillContainer(nightstand, nightDrawer);
+        fillContainer(studyDrawer1, canister);
         fillContainer(studyDrawer2, cigars);
-        fillContainer(nightDrawer, basementKey);
         fillContainer(plateSettings, knife);
         fillContainer(cupboards, kitchenKnife);
-        fillContainer(cigarBox, placeholderKey);
-        fillContainer(floorboard, placeholderKey2);
+        fillContainer(cigarBox, drawerKey);
+        fillContainer(floorboard, toolboxKey);
+        
+        // Lock items that require keys to open/ use
+        studyDrawer1.lock();
+        jewelryBox.lock();
+        cigarBox.lock();
+        candelabrum.lock();
+        bookcase.lock();
+        painting.lock();
 
         //TODO assign details
         coffeeTable.setDetails("");
@@ -322,7 +342,6 @@ public class Game2
         candle.setDetails("");
         bed.setDetails("");
         nightstand.setDetails("");
-        basementKey.setDetails("");
         tub.setDetails("");
         shower.setDetails("");
         vanity.setDetails("");
@@ -332,11 +351,11 @@ public class Game2
         smallDesk.setDetails("");
         childDrawer.setDetails("");
         floorboard.setDetails("");
-        placeholderKey2.setDetails("");
+        toolboxKey.setDetails("");
         clothes.setDetails("");
         readingNook.setDetails("");
         book.setDetails("");
-        freezerKey.setDetails("");
+        fridgeKey.setDetails("");
         backpack.setDetails("");
         woodShelves.setDetails("");
         mower.setDetails("");
@@ -350,7 +369,8 @@ public class Game2
         knife.setDetails("");
         cigarBox.setDetails("");
         drinkingCart2.setDetails("");
-        placeholderKey.setDetails("");
+        drawerKey.setDetails("");
+        painting.setDetails("");
     }
     
     /**
@@ -376,6 +396,8 @@ public class Game2
         study.addItem("top drawer", studyDrawer1);
         study.addItem("bottom drawer", studyDrawer2);
         study.addItem("cigars", cigars);
+        study.addItem("canister tube", canister);
+        study.addItem("blueprints", blueprints);
         
         library.addItem("bookshelves", bookshelves);
         library.addItem("window seat", windowSeat);
@@ -405,7 +427,6 @@ public class Game2
         masterBedroom.addItem("bed", bed);
         masterBedroom.addItem("nightstand", nightstand);
         masterBedroom.addItem("drawer", nightDrawer);
-        masterBedroom.addItem("gold key", basementKey);
         
         masterBath.addItem("bathtub", tub);
         masterBath.addItem("shower", shower);
@@ -417,20 +438,18 @@ public class Game2
         childBedroom.addItem("small desk", smallDesk);
         childBedroom.addItem("small drawer", childDrawer);
         childBedroom.addItem("floorboard", floorboard);
-        childBedroom.addItem("placeholder2", placeholderKey2);
+        childBedroom.addItem("small key", toolboxKey);
         
         closet.addItem("clothes", clothes);
         closet.addItem("reading nook", readingNook);
         closet.addItem("book", book);
-        closet.addItem("silver key", freezerKey);
+        closet.addItem("silver key", fridgeKey);
         closet.addItem("backpack", backpack);
         
         basement.addItem("wooden shelves", woodShelves);
         basement.addItem("mower", mower);
-        basement.addItem("canister tube", canister);
         basement.addItem("toolbox", toolbox);
         basement.addItem("hammer", hammer);
-        basement.addItem("blueprints", blueprints);
 
         dining.addItem("dining table", diningTable);
         dining.addItem("plate settings", plateSettings);
@@ -439,7 +458,8 @@ public class Game2
         
         lounge.addItem("cigar box", cigarBox);
         lounge.addItem("small table", drinkingCart2);
-        lounge.addItem("placeholder", placeholderKey);
+        lounge.addItem("gold key", drawerKey);
+        lounge.addItem("painting", painting);
     }
     
     /**
@@ -449,6 +469,15 @@ public class Game2
     {
         player = new Person("Player", 36, exit);
         blake = new Person("Blake", 36, exit);
+        ruby = new Person("Ruby", 50, dining);
+        olive = new Person("Olive", 50, hall);
+        ash = new Person("Ash", 50, lounge);
+        cole = new Person("Cole", 50, library);
+        
+        ruby.getCurrentRoom().addPerson("Ruby", ruby);
+        olive.getCurrentRoom().addPerson("Olive", olive);
+        ash.getCurrentRoom().addPerson("Ash", ash);
+        cole.getCurrentRoom().addPerson("Cole", cole);
     }
 
     /**
@@ -464,7 +493,6 @@ public class Game2
         
         wantToQuit = false;
         boolean done = false;
-        helped = true;
         int noCounter = 0;
         int unknownCounter = 0;
         
@@ -530,10 +558,8 @@ public class Game2
                             System.out.println("Help the trapped player? \nyes no");
                             break;
                         case 3:
-                            System.out.println("Trapped Player: Oh, alright. Well that's cool, I guess. Maybe I'll " +
-                                            "see you later. \n    Thanks anyway.");
+                            System.out.println("Trapped Player: That's alright, I'll help you instead!");
                             done = true;
-                            helped = false;
                             break;
                     }
                     break;
@@ -559,25 +585,10 @@ public class Game2
         }
         
         if(!wantToQuit) {
-            if(helped) {
                 playTogether();
-            } else {
-                playAlone();
-            }
         } else {
             System.out.println("Thank you for playing.  Good bye.");
         }
-        
-        // Enter the main command loop.  Here we repeatedly read commands and
-        // execute them until the game is over.
-        /*        
-        boolean finished = false;
-        while (! finished) {
-            command = parser.getCommand();
-            finished = processCommand(command);
-        }
-        System.out.println("Thank you for playing.  Good bye.");
-        */
     }
     
     /**
@@ -612,15 +623,19 @@ public class Game2
                     break;
                     
                 case EXAMINE:
+                    examineItem(command);
                     break;
                     
                 case USE:
+                    useItem(command);
                     break;
                 
                 case TAKE:
+                    takeItem(command);
                     break;
                     
                 case GIVE:
+                    giveItem(command);
                     break;
                     
                 case HELP:
@@ -641,15 +656,6 @@ public class Game2
             }
             
         }
-    }
-    
-    /**
-     * Play the game in single player mode.
-     */
-    private void playAlone()
-    {
-        printWelcome();
-        printGameDescription();
     }
 
     /**
@@ -696,18 +702,6 @@ public class Game2
         System.out.println();
         wait(7000);
         System.out.println("You arrive at the house and get out of the car.");
-    }
-    
-    /**
-     * Print out the single player game description message
-     * for the player.
-     */
-    private void printGameDescription()
-    {
-        System.out.println("You are a detective looking into the unsolved murder of Mr. Charles Bodie. You've just" +
-                           "\nreceived notice that your request for a warrant of Mr. Bodie's house has been granted," +
-                           "\nso you head out to gather evidence.");
-        wait(3000);
     }
 
     /**
@@ -783,11 +777,17 @@ public class Game2
             direction = command.getSecondWord() + " " + command.getThirdWord();
             //ignore the fourth word
         }
-
+        
+        if(player.hasItem("candelabrum") && !candelabrum.isLocked()) {
+            basement.blocked(false);
+            freezer.blocked(false);
+        } else {
+            basement.blocked(true);
+            freezer.blocked(true);
+        }
+        
         // Try to leave current room.
         player.goRoom(direction);
-        
-        //TODO remove person from room hashMap
     }
     
     /**
@@ -809,10 +809,20 @@ public class Game2
             //ignore the fouth word
         }
         
-        //Try to examine the item
-        player.examineItem(itemName);
+        if(itemName.equals("blueprints") && (player.hasItem("blueprints") || player.getCurrentRoom().hasItem("blueprints"))){
+            System.out.println(blueprints.getDetails());
+            study.setExit("bookcase", freezer);
+            freezer.setExit("hidden door", study);
+            
+            lounge.setExit("painting", basement);
+            basement.setExit("hatch door", lounge);
+            basement.unlock();
+        } else {
+            //Try to examine the item
+            player.examineItem(itemName);
+        }
     }
-    
+
     /**
      * Use an item.
      */
@@ -835,19 +845,390 @@ public class Game2
         
         //TODO the actual use part
         Item item = player.getItem(itemName);
-        if(item != null) {
-            
-        } else {
-            System.out.println("Item not in inventory.");
-        }
-        /*
-         * if return null, item in inventory, fail.
-         * if item found is false, fail.
-         * switch (item) case:
-         *      if not in right room, fail.
-         * 
-         */
-    }
+        Room room = player.getCurrentRoom();
+        int eatCounter = 0;
+        int timeCounter = 0;
+        int carcassCounter = 0;
+        switch(itemName) {
+            case "pot":
+                if(room != kitchen) {
+                    System.out.println("Item is not in the room.");
+                } else if(eatCounter > 5) {
+                    System.out.println("The pot is empty. You ate eveything. How rude; that was someone's dinner.");
+                } else {
+                    System.out.println("You help yourself to a bowl of stew.");
+                    System.out.println();
+                    System.out.println("Blake: By all means, treat yourself. It's not like we're busy or anything.");
+                    System.out.println();
+                    player.eat();
+                    eatCounter ++;
+                }
+                break;
+                
+            case "bed":
+                if(room != masterBedroom) {
+                    System.out.println("Item is not in the room.");
+                } else {
+                    System.out.println("You get into bed and settle in for a power nap.");
+                    System.out.println();
+                    System.out.println("Blake: Are you serious right now?\n");
+                    System.out.println();
+                    System.out.print("."); wait(1000); System.out.print("."); wait(1000); 
+                    System.out.print("."); wait(1000); System.out.print("."); wait(1000);
+                    System.out.print("."); wait(1000); System.out.println(".\n"); wait(1000);
+                    player.sleep();
+                    timeCounter += 3;
+                    if(timeCounter >= 15) {
+                        System.out.println("Blake: I hope you're happy.\n");
+                        wait(1500);
+                        System.out.println("You look out the window and you see it's daytime. Your phone rings. It's " +
+                                    "your boss and \nthey're furious. You haven't gathered enough evidence to close " +
+                                    "the case and the killer \ngot away while you were sleeping. You are suspended " +
+                                    "indefinitely without pay...");
+                        wait(10000);
+                        System.out.println("\n\n\n                                          Game Over\n\n\n");
+                        wantToQuit = true;
+                    } else {
+                        System.out.println("Blake: Feel better? Can we get back to work now?\n");
+                    }
+                }
+                break;
+                
+            case "carcass":
+                if(room != fridge) {
+                    System.out.println("Item is not in the room.");
+                } else {
+                    switch(carcassCounter) {
+                        case 0:
+                            System.out.println("Blake: DON'T! Trust me it's not worth it. There's nothing in it " +
+                                        "and you'll get blood all \nover you. And then no one will talk to you " + 
+                                        "until you clean up.\n");
+                            carcassCounter++;
+                            break;
+                            
+                        case 1:
+                            player.useCarcass();
+                            System.out.println();
+                            wait(3000);
+                            System.out.println("Blake: What did I tell you? Now you'll need to take a shower " +
+                                        "before we can do anything\n");
+                            carcassCounter++;
+                            break;
+                            
+                        case 2:
+                            player.useCarcass();
+                            System.out.println();
+                            wait(2000);
+                            System.out.println("Blake: Seriously, again? I think I'm gonna throw up...\n");
+                            carcassCounter++;
+                            break;
+                            
+                        default:
+                            if(carcassCounter > 10) {
+                                System.out.println("Blake: Great, now you've done it.\n");
+                                wait(1500);
+                                player.useCarcass();
+                                System.out.println("\nNo one will talk to you because you keep fondling the meat.");
+                                System.out.println("\n\n\n                                          Game Over\n\n\n");
+                                wantToQuit = true;
+                                break;
+                            }
+                            player.useCarcass();
+                            System.out.println();
+                            wait(2000);
+                            System.out.println("Blake: Stop that. You're so gross and weird.\n");
+                            carcassCounter++;
+                            break;
+                    }
+                }
+                break;
+                
+            case "bathtub":
+                if(room != masterBath) {
+                    System.out.println("Item is not in the room.");
+                } else {
+                    System.out.println("You draw a bath and start to undress.");
+                    System.out.println();
+                    wait(500);
+                    if(player.isDirty()) {
+                        System.out.println("Blake: A bath? Really? There's a shower right there. Whatever, I'll be " +
+                                    "outside.\n");
+                    } else {
+                        System.out.println("Blake: What are you doing! You're not even dirty?! Who just takes a bath " +
+                                    "in a stranger's house?\n");
+                    }
+                    System.out.print("."); wait(1000); System.out.print("."); wait(1000); 
+                    System.out.print("."); wait(1000); System.out.print("."); wait(1000);
+                    System.out.print("."); wait(1000); System.out.print("."); wait(1000);
+                    System.out.print("."); wait(1000); System.out.println(".\n"); wait(1000);
+                    player.takeBath();
+                    timeCounter += 5;
+                    if(timeCounter >= 15) {
+                        System.out.println("Blake: Hope it was worth it.\n");
+                        wait(1000);
+                        System.out.println("You head out of the bathroom. Your phone rings. It's your boss and " +
+                                "they're furious. \nOne of the witness called and complained about a deadbeat cop " +
+                                "who was just wasting \ntime in the tub. You are suspended indefinitely without pay...");
+                        wait(10000);
+                        System.out.println("\n\n\n                                          Game Over\n\n\n");
+                        wantToQuit = true;
+                    }
+                }
+                break;
+                        
+            case "shower":
+                if(room != masterBath) {
+                    System.out.println("Item is not in the room.");
+                } else {
+                    System.out.println("You start the shower.");
+                    System.out.println();
+                    wait(500);
+                    if(player.isDirty()) {
+                        System.out.println("Blake: Be quick, okay? If you waste too much time, we lose the game.\n");
+                    } else {
+                        System.out.println("Blake: What are you doing! You're not even dirty?! Whatever, I'll be " +
+                                    "outside.\n");
+                    }
+                    System.out.print("."); wait(500); System.out.print("."); wait(500); 
+                    System.out.print("."); wait(500); System.out.print("."); wait(500);
+                    System.out.print("."); wait(500); System.out.print("."); wait(500);
+                    System.out.print("."); wait(500); System.out.println(".\n"); wait(500);
+                    player.shower();
+                    timeCounter += 1;
+                    if(timeCounter >= 15) {
+                        System.out.println("Blake: Congratulations, moron.\n");
+                        wait(1000);
+                        System.out.println("You head out of the bathroom. Your phone rings. It's your boss and " +
+                                "they're furious. \nOne of the witness called and complained about a deadbeat cop " +
+                                "who was just wasting \ntime. You are suspended indefinitely without pay...");
+                        wait(10000);
+                        System.out.println("\n\n\n                                          Game Over\n\n\n");
+                        wantToQuit = true;
+                    }
+                }
+                break;
+                        
+            case "rug":
+                if(room != childBedroom) {
+                    System.out.println("Item is not in the room.");
+                } else {
+                    if(floorboard.isFound()) {
+                        System.out.println("You cannot use this item again.");
+                    } else {
+                        System.out.println("You lift up the rug and see a loose floorboad under it.");
+                        floorboard.found();
+                    }
+                }
+                break;
+                        
+            case "floorboard":
+                if(room != childBedroom) {
+                    System.out.println("Item is not in the room.");
+                } else {
+                    player.examineItem("floorboard");
+                }
+                break;
+                
+            case "stovetop":
+                if(room != kitchen) {
+                    System.out.println("Item is not in the room.");
+                } else if(player.hasItem("candelabrum") && candelabrum.isLocked()) {
+                    System.out.println("You use the stove to light the candelabrum.");
+                    candelabrum.unlock();
+                } else {
+                    System.out.println("Nothing to use item for.");
+                }
+                break;
+                
+            default:
+                if(item != null) {
+                    switch(itemName) {
+                        case "cigars":
+                            if(room != lounge) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                System.out.println("You place the cigars in the cigar box and a small compartment " +
+                                        "pops out of the side.");
+                                player.useItem("cigars");
+                                cigarBox.unlock();
+                                //cigarBox.setDetails("")?????????????????????????????????????
+                            }
+                            break;
+                            
+                        case "bronze key":
+                            if(room != childBedroom) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                System.out.println("You place the key in the closet door and turn it. The " +
+                                        "door unlocks.");
+                                player.useItem("bronze key");
+                                closet.unlock();
+                            }
+                            break;
+
+                        case "kitchen knife":
+                            if(room.isEmpty()) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                if(room.hasPerson("Cole")) {
+                                    System.out.println("You attempt to charge Cole armed with a kitchen knife. " +
+                                                "Cole easily blocks you and punches \nyou in the face. You feel " +
+                                                "blood gush out of your nose.");
+                                } else if(room.hasPerson("Ash")) {
+                                    System.out.println("You raise you knife to strike Ash, but before you can bring "+
+                                                "it down, Ash uppercuts you in \nthe chin. You feel your mouth fill " +
+                                                "with blood.");
+                                } else if(room.hasPerson("Ruby")) {
+                                    System.out.println("Before you can even get a firm grip on the knife, Ruby pulls "+
+                                                "out a can of peper spray and \nnails you in the face with it. Your " +
+                                                "eyes burn and you can barely see.");
+                                } else if(room.hasPerson("Olive")) {
+                                    System.out.println("You try to attack with your knife, but Olive kicks your " +
+                                                "legs out from under you. You fall \nto your knees and Olive hits you " +
+                                                "in the face with her clutch purse. You feel blood drip \ndown your " +
+                                                "face.");
+                                }
+                                
+                                player.attack();
+                                System.out.println();
+                                wait(2500);
+                                System.out.println("Blake: Yeah, no. Attacking the NPC's is a no-no. They don't " +
+                                                "hold it against you, \nbut they'll always win. And now you need " +
+                                                "to clean up.\n");
+                                
+                                if(!player.isConscious()) {
+                                    System.out.println("You feel exceptionally dizzy. The room spins around "+
+                                                "and the floor rushes up to meet you. \nEverything goes dark. You " +
+                                                "are unconscious.");
+                                    System.out.println("\n\n\n                                          Game " +
+                                                "Over\n\n\n");
+                                    wantToQuit = true;
+                                }
+                            }
+                            break;
+
+                        case "candle":
+                            if(player.hasItem("candelabrum") || room.hasItem("candelabrum")) {
+                                candelabrum.unlock();
+                                System.out.println("You use the candle to light the candelabrum.");
+                            }
+                            break;
+                        
+                        case "silver key": 
+                            if(room != kitchen) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                System.out.println("You place the key in the refrigerator door and turn it. The " +
+                                        "door unlocks.");
+                                player.useItem("silver key");
+                                fridge.unlock();
+                            }
+                            break;
+                        
+                        case "gold key":
+                            if(room != study) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                System.out.println("You place the key in the top drawer's keyhole and turn it. The " +
+                                        "drawer unlocks.");
+                                player.useItem("gold key");
+                                studyDrawer1.unlock();
+                            }
+                            break;
+
+                        case "small key":
+                            if(room != basement) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                if(toolbox.isFound()) {
+                                    System.out.println("You use the small key to unlock the toolbox.");
+                                    player.useItem("small key");
+                                    toolbox.unlock();
+                                } else {
+                                    System.out.println("Nothing to use item on.");
+                                }   
+                            }
+                            break;
+                        
+                        case "book":
+                            if(room != study) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                if(blueprints.isFound()) {
+                                    System.out.println("You place the book into the empty spot on the shelf. The " +
+                                                "bookcase swings open to reveal a \nvery dark passageway.");
+                                    player.useItem("book");
+                                    freezer.unlock();
+                                }
+                            }
+                            break;
+                        
+                        case "hammer":
+                            System.out.println("You cannot use this item. It is evidence.");
+                            break;
+                        
+                        case "steak knife":
+                            if(room.isEmpty()) {
+                                System.out.println("Nothing to use item on.");
+                            } else {
+                                if(room.hasPerson("Cole")) {
+                                    System.out.println("You attempt to charge Cole armed with a steak knife. " +
+                                                "Cole easily blocks you and punches \nyou in the face. You feel " +
+                                                "blood gush out of your nose.");
+                                } else if(room.hasPerson("Ash")) {
+                                    System.out.println("You raise you knife to strike Ash, but before you can bring "+
+                                                "it down, Ash uppercuts you in \nthe chin. You feel your mouth fill " +
+                                                "with blood.");
+                                } else if(room.hasPerson("Ruby")) {
+                                    System.out.println("Before you can even get a firm grip on the knife, Ruby pulls "+
+                                                "out a can of peper spray and \nnails you in the face with it. Your " +
+                                                "eyes burn and you can barely see.");
+                                } else if(room.hasPerson("Olive")) {
+                                    System.out.println("You try to attack with your knife, but Olive kicks your " +
+                                                "legs out from under you. You fall \nto your knees and Olive hits you " +
+                                                "in the face with her clutch purse. You feel blood drip \ndown your " +
+                                                "face.");
+                                }
+                                
+                                player.attack();
+                                System.out.println();
+                                wait(2500);
+                                System.out.println("Blake: Yeah, no. Attacking the NPC's is a no-no. They don't " +
+                                                "hold it against you, \nbut they'll always win. And now you need " +
+                                                "to clean up.\n");
+                                
+                                if(!player.isConscious()) {
+                                    System.out.println("You feel exceptionally dizzy. The room spins around "+
+                                                "and the floor rushes up to meet you. \nEverything goes dark. You " +
+                                                "are unconscious.");
+                                    System.out.println("\n\n\n                                          Game " +
+                                                "Over\n\n\n");
+                                    wantToQuit = true;
+                                }
+                            }
+                            break;
+                        
+                        case "candelabrum":
+                            if(candelabrum.isLocked()){ 
+                                System.out.println("The candelabrum is unlit. You cannot use it.");
+                            } else {
+                                basement.blocked(false);
+                                freezer.blocked(false);
+                                if(room != study && room != lounge) {
+                                    System.out.println("Nothing to use item on.");
+                                }
+                            }
+                            break;
+                            
+                        default:
+                            System.out.println("This item cannot be used.");
+                            break;
+                    } 
+                } else {
+                    System.out.println("Item not in inventory");
+                } // end of default use case
+        } // end of use switch case
+    } // end of useItem method
     
     /**
      * Give an item to a person.
@@ -874,12 +1255,17 @@ public class Game2
             itemName = command.getSecondWord() + " " + command.getThirdWord();
             personName = command.getFourthWord();
         }
-        
-        //TODO add people hashMap to room + corresponding remove/add methods?
+
+        if(player.getCurrentRoom().hasPerson(personName)) {
+            Person person = currentRoom.getPerson(personName);
+            player.giveItem(itemName, person);
+        }else {
+            System.out.println("This person is not in the room.");
+        }
     }
     
     /**
-     * Add item to inventory
+     * Add an item to inventory
      */
     private void takeItem(Command command)
     {
@@ -898,6 +1284,27 @@ public class Game2
         
         player.takeItem(itemName);
     }
+    
+    /**
+     * Drop an item from inventory
+     */
+    private void dropItem(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            System.out.println("Drop what?");
+        }
+        
+        String itemName = null;
+        if(!command.hasThirdWord()) {
+            // The item is only one word
+            itemName = command.getSecondWord();
+        } else {
+            // the item has two words
+            itemName = command.getSecondWord() + " " + command.getThirdWord();
+        }
+        
+        player.dropItem(itemName);
+    }
 
     /** 
      * "Quit" was entered. Check the rest of the command to see
@@ -908,10 +1315,8 @@ public class Game2
     {
         System.out.println("Are you sure you want to quit? \nyes no");
         if(parser.getCommand().getCommandWord().toString().equals("yes")) {
-            if(helped) {
-                System.out.println("Blake: Wait! Don't lea");
-                wait(200);
-            }
+            System.out.println("Blake: Wait! Don't lea");
+            wait(200);
             System.out.println("Thank you for playing.  Good bye.");
             return true; // signal that we want to quit
         } else {
@@ -936,8 +1341,33 @@ public class Game2
         }
     }
     
+    /**
+     * Move an NPC around the map. Remove person from their current
+     * room, set their new current room and add them to that room.
+     * @param room The room to move to
+     * @param person The person to move.
+     */
+    private void moveNPC(Room room, Person person)
+    {
+        person.getCurrentRoom().removePerson(person.getName(), person);
+        person.setRoom(room);
+        person.getCurrentRoom().addPerson(person.getName(), person);
+    }
+    
     public void test()
     {
-        System.out.println("run");
+        System.out.println("You try to attack with your knife, but Olive kicks your " +
+                                                "legs out from under you. You fall \nto your knees and Olive hits you " +
+                                                "in the face with her clutch purse. You feel blood drip \ndown your " +
+                                                "face.");
+        System.out.println("Before you can even get a firm grip on the knife, Ruby pulls "+
+                                                "out a can of peper spray and \nnails you in the face with it. Your " +
+                                                "eyes burn and you can barely see.");
+        System.out.println("You raise you knife to strike Ash, but before you can bring "+
+                                                "it down, Ash uppercuts you in \nthe chin. You feel your mouth fill " +
+                                                "with blood.");   
+        System.out.println("You attempt to charge Cole armed with a kitchen knife. " +
+                                                "Cole easily blocks you and punches \nyou in the face. You feel " +
+                                                "blood gush out of your nose.");                                        
     }
 }

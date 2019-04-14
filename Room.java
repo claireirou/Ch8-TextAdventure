@@ -24,8 +24,21 @@ public class Room
     private String lookDescription;
     private boolean visited;
     private boolean locked;
+    private boolean blocked;
     private HashMap<String, Item> items;        // stores items in this room.
     private HashMap<String, Person> people;     // stores people in this room.
+    
+    
+    
+    
+    //TODO add getItemString()
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Create a room described "description". Initially, it has
@@ -41,6 +54,7 @@ public class Room
         items = new HashMap<String, Item>();
         people = new HashMap<String, Person>();
         visited = false;
+        blocked = false;
     }
 
     /**
@@ -216,6 +230,15 @@ public class Room
     }
     
     /**
+     * See if there is anyone in the room.
+     * @return true if the room is empty, else false
+     */
+    public boolean isEmpty()
+    {
+        return people.isEmpty();
+    }
+    
+    /**
      * Change a room's status to visited
      */
     public void visit()
@@ -241,6 +264,23 @@ public class Room
         if(locked) {
             locked = false;
         }
+    }
+    
+    /**
+     * Set the blocked status of the room.
+     */
+    public void blocked(boolean blocked)
+    {
+        this.blocked = blocked;
+    }
+    
+    /**
+     * Return blocked status
+     * @return true if blocked, else false
+     */
+    public boolean isBlocked()
+    {
+        return blocked;
     }
 }
 

@@ -18,6 +18,8 @@ public class Person
     private Room nextRoom;
     private Room previousRoom;
     private int decked;
+    private boolean dirty;
+    private boolean conscious;
     
     
     
@@ -43,6 +45,8 @@ public class Person
         previousRoom = null;
         inventoryWeight = 0;
         decked = 0;
+        dirty = false;
+        conscious = true;
         currentRoom.visit();
     }
     
@@ -54,22 +58,25 @@ public class Person
     {
         if(currentRoom.hasItem(itemName)) {
             Item item = currentRoom.getItem(itemName);
-            
-            if(itemName.equals("backpack")) {
-                inventoryMax += 20;
-                System.out.println("You have found a backpack! You can now carry more items");
+            if(item.isFound()) {
+                if(itemName.equals("backpack")) {
+                    inventoryMax += 20;
+                    System.out.println("You have found a backpack! You can now carry more items");
+                    System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
+                    return;
+                }
+                
+                if(addItem(itemName, item)) {
+                    // Item was successfully added
+                    currentRoom.removeItem(itemName, item);     // remove from room
+                    System.out.println("Item added to inventory.");
+                }
+                
+                // Print out inventory weight
                 System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
-                return;
-            } 
-            
-            if(addItem(itemName, item)) {
-                // Item was successfully added
-                currentRoom.removeItem(itemName, item);     // remove from room
-                System.out.println("Item added to inventory.");
+            } else {
+                System.out.println("Item not found.");
             }
-            
-            // Print out inventory weight
-            System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
         } else {
             System.out.println("This item is not in the room.");
         }
@@ -98,6 +105,16 @@ public class Person
     }
     
     /**
+     * Remove a used item from inventory.
+     * @param itemName The name of the item to remove
+     */
+    public void useItem(String itemName)
+    {
+        Item item = inventory.get(itemName);
+        removeItem(itemName, item);
+    }
+    
+    /**
      * Try to examine an item. If the item is not in the room,
      * print an error message, otherwise print item details.
      * @param itemName The item to examine
@@ -108,9 +125,13 @@ public class Person
             //Item is in the room and has been found
             Item item = currentRoom.getItem(itemName);
             System.out.println(item.getDetails());
-            item.findItems();       //Find the items inside the item if any
-        } else if(inventory.containsKey(itemName)){
             
+            if(!item.isLocked()) {
+                // Item is not locked
+                item.findItems();       //Find any items inside the item.
+            }
+            
+        } else if(inventory.containsKey(itemName)){
             System.out.println(inventory.get(itemName).getDetails());
         } else {
             System.out.println("This item is not in the room.");
@@ -122,7 +143,8 @@ public class Person
      * full or the item is not in the giver's inventory print out error 
      * message.
      * @param itemName The name of the item to give
-     * @param person The person to give the item to
+     * @param personName The name of the person to give the item to
+     * @return true if give was successful, else false
      */
     public void giveItem(String itemName, Person person)
     {
@@ -152,6 +174,9 @@ public class Person
             System.out.println("You cannot go that way!");
         } else if (nextRoom.isLocked()) {
             System.out.println("The door is locked.");
+            nextRoom = null;
+        } else if(nextRoom.isBlocked()) {
+            System.out.println("The way is too dark to navigate.");
             nextRoom = null;
         } else {
             previousRoom = currentRoom;
@@ -183,6 +208,87 @@ public class Person
     }
     
     /**
+     * Eat some food to heal up.
+     */
+    public void eat()
+    {
+        decked -= 5;
+        System.out.println("It's delicious and you feel better.");
+        if(decked < 0) {
+            decked = 0;
+        }
+    }
+    
+    /**
+     * Take a nap to heal up.
+     */
+    public void sleep()
+    {
+        decked -= 10;
+        System.out.println("You wake up. You're not sure how much time has passed, but you feel much better.");
+        if(decked < 0) {
+            decked = 0;
+        }
+    }
+    
+    /**
+     * Touch the gross piece of hanging meat.
+     */
+    public void useCarcass()
+    {
+        System.out.println("You examine the carcass more closely; searching inside of it to make sure there's nothing " +
+                           "\nthere. You find nothing. Your arms and clothes are covered in gross meat-stuff.");
+        dirty = true;
+    }
+    
+    /**
+     * Take a bath to clean up and heal up.
+     */
+    public void takeBath()
+    {
+        decked -= 2;
+        dirty = false;
+        System.out.println("You are now squeaky clean and you feel marginally better after your hour long bath.");
+        if(decked < 0) {
+            decked = 0;
+        }
+    }
+    
+    /**
+     * Take a shower to clean up and heal up.
+     */
+    public void shower()
+    {
+        decked -= 5;
+        dirty = false;
+        System.out.println("You've quickly and effeciently showered. You feel a bit better, too.");
+        if(decked < 0) {
+            decked = 0;
+        }
+    }
+    
+    /**
+     * Try to attack an NPC. Fail miserably.
+     */
+    public void attack()
+    {
+        decked += 10;
+        dirty = true;
+        if(decked >= 30) {
+            conscious = false;
+        }
+    }
+    
+    /**
+     * Get consciousness status.
+     * @return true if awake, false if passed out.
+     */
+    public boolean isConscious()
+    {
+        return conscious;
+    }
+    
+    /**
      * Return item if it is in inventory. 
      * If the item is not in inventory return null, 
      *      otherwise return the item.
@@ -193,6 +299,16 @@ public class Person
     {
             return inventory.get(itemName);
     }
+    
+    /**
+     * Check if item is in inventory.
+     * @param itemName The name of the item to check for
+     * @return true if item is in inventory, else false.
+     */
+    public boolean hasItem(String itemName)
+    {
+        return inventory.containsKey(itemName);
+    }
 
     /**
      *  Move NPC to new room.
@@ -202,6 +318,15 @@ public class Person
     {
         previousRoom = currentRoom;
         currentRoom = room;
+    }
+    
+    /**
+     * Return the person's dirty status.
+     * @return true if dirty, else false.
+     */
+    public boolean isDirty()
+    {
+        return dirty;
     }
     
     /**
