@@ -197,6 +197,8 @@ public class Person
     {
         Set <String> keys = inventory.keySet();
         System.out.println("_____________________________________");
+        
+        // Print out current inventory weight and capacity.
         System.out.println("Inventory: " + inventoryWeight + " lbs/ " + inventoryMax +" lbs\n");
         System.out.println("Items:");
         for(String item : keys) {
