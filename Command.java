@@ -1,17 +1,21 @@
 /**
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
+ * This class is part of the "Mansion Detective" application. 
+ * "Mansion Detective" is a text based murder myster adventure game.  
  *
  * This class holds information about a command that was issued by the user.
- * A command currently consists of two parts: a CommandWord and a string
- * (for example, if the command was "take map", then the two parts
- * are TAKE and "map").
+ * A command currently consists of up to four parts: a CommandWord and a series of strings
+ * (for example, if the command was "take old map", then the three parts
+ * are TAKE and "old" and "map").
  * 
  * The way this is used is: Commands are already checked for being valid
  * command words. If the user entered an invalid command (a word that is not
  * known) then the CommandWord is UNKNOWN.
  *
- * If the command had only one word, then the second word is <null>.
+ * If the command had only one word, then the second, third and fourth
+ * words are <null>.
+ * 
+ * @author Claire Iroudayassamy
+ * @version 2019.04.15
  * 
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.08.10
@@ -25,11 +29,13 @@ public class Command
     private String fourthWord;
 
     /**
-     * Create a command object. First and second words must be supplied, but
-     * the second may be null.
+     * Create a command object. First, second, third, and fourth 
+     * words must be supplied, but the second, third and fouth may be null.
      * @param commandWord The CommandWord. UNKNOWN if the command word
      *                  was not recognised.
      * @param secondWord The second word of the command. May be null.
+     * @param thirdWord The third word of the command. May be null.
+     * @param fourthWord The fourth word of the command. May be null.
      */
     public Command(CommandWord commandWord, String secondWord, String thirdWord, String fourthWord)
     {

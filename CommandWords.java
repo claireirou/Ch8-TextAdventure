@@ -1,12 +1,15 @@
 import java.util.HashMap;
 
 /**
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.
+ * This class is part of the "Mansion Detective" application. 
+ * "Mansion Detective" is a text based murder myster adventure game. 
  * 
  * This class holds an enumeration of all command words known to the game.
  * It is used to recognise commands as they are typed in.
  *
+ * @author Claire Iroudayassamy
+ * @version 2019.04.15
+ * 
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.08.10
  */
@@ -62,7 +65,7 @@ public class CommandWords
     public void showAll() 
     {
         for(String command : validCommands.keySet()) {
-            System.out.print(command + "  ");
+            System.out.print(command + " -");
         }
         System.out.println();
     }

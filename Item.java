@@ -1,30 +1,36 @@
-import java.util.HashMap;
 import java.util.ArrayList;
 
 /**
- * Write a description of class Item here.
+ * Class Item - an item in a text-based game.
+ * 
+ * This class is part of the "Mansion Detective" application. 
+ * "Mansion Detective" is a text based murder myster adventure game. 
+ * 
+ * An "Item" represents an object a person can interact with. It has 
+ * a weight and can be locked. An item can also have items inside of it.
  *
  * @author (your name)
  * @version (a version number or a date)
  */
 public class Item
 {
-    private boolean found;
+    private boolean found;  
     private boolean locked;
     private final int weight;
     private String name;
     private String details;
-    private ArrayList<Item> items;
-    private Item container;
+    private ArrayList<Item> items;          // Stores all the items inside this item
+    private Item container;                 // Stores the item this item is contained in
     
     /**
-     * Constructor for objects of class Item
+     * Create an item named "name". Initially it has a weight
+     * and is either out in the open or hidden.
      */
     public Item(String name, int weight, boolean found)
     {
         items = new ArrayList<Item>();
         container = null;
-        this.found = found;
+        this.found = found;             // Determines if item has been found
         this.name = name;
         this.weight = weight;
         locked = false;
@@ -155,7 +161,8 @@ public class Item
     }
     
     /**
-     * Find the items inside this item
+     * Find the items inside this item and 
+     * print out their details.
      */
     public void findItems()
     {

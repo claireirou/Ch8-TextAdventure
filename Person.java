@@ -1,38 +1,37 @@
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Write a description of class Person here.
+ * Class Person - a character in a text-based game
+ * 
+ * This class is part of the "Mansion Detective" application. 
+ * "Mansion Detective" is a text based murder myster adventure game.
+ * 
+ * A "Person" represents any character (player or NPC) in the game.
+ * They have an inventory that stores item names and their object
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Claire Iroudayassamy
+ * @version 2019.04.15
  */
 public class Person
 {
-    private HashMap<String, Item> inventory;
-    private int inventoryMax;
+    private HashMap<String, Item> inventory;    // stores items this person has
+    private int inventoryMax;                   // determines the max amount person can carry
     private int inventoryWeight;
     private String name;
-    private Room currentRoom;
+    private Room currentRoom;                   
     private Room nextRoom;
     private Room previousRoom;
-    private int decked;
+    private int decked;                         // rudimentary health system
     private boolean dirty;
-    private boolean conscious;
-    
-    
-    
-    //TODO show inventory
-    
-    
-    
-    
-    
-    
+    private boolean conscious;                  // determines if person is "dead"
+    private String itemKey; 
+    private boolean met;
+
     /**
-     * Constructor for objects of class Person
+     * Create a person. Initially they only have a name,
+     * their inventory capacity, and the room they start in.
      * @param name The name of the person
      * @param maxWeight The max weight a person can carry.
      * @param startingRoom The room the person starts in.
@@ -48,10 +47,11 @@ public class Person
         decked = 0;
         dirty = false;
         conscious = true;
+        met = false;
     }
     
     /**
-     * Take an item from the room.
+     * Take an item from the room and add it to inventory.
      * @param itemName The name of the item to take
      */
     public void takeItem(String itemName)
@@ -64,12 +64,18 @@ public class Person
                     inventoryMax += 20;
                     System.out.println("You have found a backpack! You can now carry more items");
                     System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
+                    currentRoom.removeItem(itemName, item);
                     return;
                 }
                 
                 if(addItem(itemName, item)) {
                     // Item was successfully added
                     currentRoom.removeItem(itemName, item);     // remove from room
+                    if(item.getContainer() != null) {
+                        // Item was in a container
+                        item.getContainer().remove(item);
+                        item.setContainer(null);
+                    }
                     System.out.println("Item added to inventory.");
                 }
                 
@@ -84,7 +90,7 @@ public class Person
     }
     
     /**
-     * Drop item from inventory.
+     * Drop item from inventory and add it to current room.
      * @param itemName The name of the item to drop
      */
     public void dropItem(String itemName)
@@ -100,14 +106,15 @@ public class Person
             removeItem(itemName, item);
             currentRoom.addItem(itemName, item);
             System.out.println(item.getName() + " dropped.");
-            System.out.println("Inventory weight: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
+            System.out.println("Inventory weight: " + inventoryWeight + " lbs/ " + inventoryMax +" lbs\n");
         } else {
             System.out.println("You do not have this item in your inventory!");
         }
     }
     
     /**
-     * Remove a used item from inventory.
+     * Remove a used item from inventory. Feed it to the void.
+     *      (Item will no longer have any location reference)
      * @param itemName The name of the item to remove
      */
     public void useItem(String itemName)
@@ -127,7 +134,6 @@ public class Person
         System.out.println();
         if(item != null && item.isFound()) {
             //Item is in the room and has been found
-            //Item item = currentRoom.getItem(itemName);
             System.out.println(item.getDetails());
             
             if(!item.isLocked()) {
@@ -135,11 +141,17 @@ public class Person
                 item.findItems();       //Find any items inside the item.
             } else if(itemName.equals("candelabrum")) {
                 System.out.println("It's unlit");
+            } else if(itemName.equals("painting") || itemName.equals("bookcase")) {
+                System.out.print("");
             } else if(!itemName.equals("cigar box")) {
                 System.out.println("It's locked.");
-            }
+            } 
+            
         } else if(inventory.containsKey(itemName)){
+            // Item is in inventory
+            item = inventory.get(itemName);
             System.out.println(inventory.get(itemName).getDetails());
+            item.findItems();
         } else {
             System.out.println("This item is not in the room.");
         }
@@ -157,10 +169,15 @@ public class Person
     {
         System.out.println();
         if(inventory.containsKey(itemName)) {
+            // Giver has the item
             Item item = inventory.get(itemName);
             if((person.getInventorySize() + item.getWeight()) >= person.getInventoryMax()) {
+                // Receiver's inventory is full.
                 System.out.println("Inventory is full! Item not given.");
-            } else {
+            } else if(!itemName.equals(person.getItemKey())){
+                System.out.println(person.getName() + ": I don't want that.");
+            }else {
+                // give item
                 removeItem(itemName, item);
                 person.addItem(itemName, item);
                 System.out.println("Item successfully given.");
@@ -171,15 +188,19 @@ public class Person
     }
     
     /**
-     * Print out inventory details.
+     * Print out inventory details in the form:
+     *      "Items:
+     *       book: 3 lbs
+     *       pen: 1 lbs"
      */
     public void showInventory()
     {
         Set <String> keys = inventory.keySet();
         System.out.println("_____________________________________");
-        System.out.println("Inventory: " + inventoryWeight + "lbs/ " + inventoryMax +"lbs\n");
+        System.out.println("Inventory: " + inventoryWeight + " lbs/ " + inventoryMax +" lbs\n");
+        System.out.println("Items:");
         for(String item : keys) {
-            System.out.println(item + ": " + inventory.get(item).getWeight() + "lbs");
+            System.out.println(item + ": " + inventory.get(item).getWeight() + " lbs");
         }
         System.out.println("_____________________________________");
     }
@@ -194,17 +215,22 @@ public class Person
         nextRoom = currentRoom.getExit(direction);
         System.out.println();
         if (nextRoom == null) {
+            // Exit doesn't exist
             System.out.println("You cannot go that way!");
         } else if (nextRoom.isLocked()) {
+            // Door is locked
             System.out.println("The door is locked.");
             nextRoom = null;
         } else if(nextRoom.isBlocked()) {
+            // Door is blocked
             System.out.println("The way is too dark to navigate.");
             nextRoom = null;
         } else {
             previousRoom = currentRoom;
             currentRoom = nextRoom;
             nextRoom = null;
+            
+            // Print out new room details.
             if(currentRoom.visited()) {
                 System.out.println(currentRoom.getLongDescription());
             } else {
@@ -236,9 +262,8 @@ public class Person
      */
     public void eat()
     {
-        System.out.println();
         decked -= 5;
-        System.out.println("It's delicious and you feel better.");
+        System.out.println("It's delicious and you feel better. \nHealth +5");
         if(decked < 0) {
             decked = 0;
         }
@@ -251,7 +276,7 @@ public class Person
     {
         System.out.println();
         decked -= 10;
-        System.out.println("You wake up. You're not sure how much time has passed, but you feel much better.");
+        System.out.println("You wake up. You're not sure how much time has passed, but you feel much better. \nHealth +10");
         if(decked < 0) {
             decked = 0;
         }
@@ -276,7 +301,7 @@ public class Person
         System.out.println();
         decked -= 2;
         dirty = false;
-        System.out.println("You are now squeaky clean and you feel marginally better after your hour long bath.");
+        System.out.println("You are now squeaky clean and you feel marginally better after your hour long bath. \nHealth +2");
         if(decked < 0) {
             decked = 0;
         }
@@ -290,7 +315,7 @@ public class Person
         System.out.println();
         decked -= 5;
         dirty = false;
-        System.out.println("You've quickly and effeciently showered. You feel a bit better, too.");
+        System.out.println("You've quickly and effeciently showered. You feel a bit better, too. \nHealth +5");
         if(decked < 0) {
             decked = 0;
         }
@@ -301,12 +326,29 @@ public class Person
      */
     public void attack()
     {
-        System.out.println();
+        System.out.println("Health -10");
         decked += 10;
         dirty = true;
         if(decked >= 30) {
             conscious = false;
         }
+    }
+    
+    /**
+     * Return if an NPC has been met
+     * @return true if met, else false
+     */
+    public boolean isMet()
+    {
+        return met;
+    }
+    
+    /**
+     * Meet an NPC.
+     */
+    public void meet()
+    {
+        met = true;
     }
     
     /**
@@ -385,6 +427,24 @@ public class Person
     }
     
     /**
+     * Set the item name that unlocks person hints.
+     * @param itemName The name of the item key.
+     */
+    public void setItemKey(String itemName)
+    {
+        itemKey = itemName;
+    }
+    
+    /**
+     * Return the name of the item that unlocks person hints.
+     * @return the name of the item
+     */
+    public String getItemKey()
+    {
+        return itemKey;
+    }
+    
+    /**
      * Return inventory capacity.
      */
     public int getInventoryMax()
@@ -409,14 +469,17 @@ public class Person
     private boolean addItem(String itemName, Item item)
     {
         if(item.getWeight() >= 50) {
+            // Item is too heavy to be carried.
             System.out.println("You are too weak to carry this item.");
             return false;
         } else {
             if((item.getWeight() + inventoryWeight) <= inventoryMax) {
+                // Inventory has room for item
                 inventory.put(itemName, item);          // add to inventory
                 inventoryWeight += item.getWeight();    //adjust inventory weight
                 return true;
             } else {
+                // Inventory is too full
                 System.out.println("You cannot carry anymore.");
                 System.out.println("This item weighs " + item.getWeight() + "lbs");
                 return false;

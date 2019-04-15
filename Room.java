@@ -1,17 +1,19 @@
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ArrayList;
 
 /**
- * Class Room - a room in an adventure game.
+ * Class Room - a room in a text-based game.
  *
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
+ * This class is part of the "Mansion Detective" application. 
+ * "Mansion Detective" is a text based murder myster adventure game.  
  *
- * A "Room" represents one location in the scenery of the game.  It is 
+ * A "Room" represents one location in the game.  It is 
  * connected to other rooms via exits.  For each existing exit, the room 
  * stores a reference to the neighboring room.
+ * 
+ * @author Claire Iroudayassamy
+ * @version 2019.04.15
  * 
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.08.10
@@ -22,27 +24,15 @@ public class Room
     private String name;
     private HashMap<String, Room> exits;        // stores exits of this room.
     private String lookDescription;
-    private boolean visited;
-    private boolean locked;
+    private boolean visited;                    // Determines if player has been in this room before
+    private boolean locked;                     // Determines if room is locked.
     private boolean blocked;
     private HashMap<String, Item> items;        // stores items in this room.
     private HashMap<String, Person> people;     // stores people in this room.
-    
-    
-    
-    
-    //TODO add getItemString()
-    
-    
-    
-    
-    
-    
-    
 
     /**
      * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
+     * no exits, items, or people. "description" is something like "a kitchen" or
      * "an open court yard".
      * @param description The room's description.
      */
@@ -79,26 +69,29 @@ public class Room
     /**
      * Return a description of the room in the form:
      *     You are in the kitchen.
+     *     People in room: joe - mary
+     *     Items in room: pen - book
      *     Exit: north west
      * @return A long description of this room
      */
     public String getLongDescription()
     {
-        return "You are " + name + ".\n" + getItemString() + getExitString();
+        return "You are " + name + ".\n" + getPeopleString() + getItemString() + getExitString();
     }
     
     /**
      *  Return a detailed description of the room.
+     *  With a list of the items, people, and exits in 
+     *  the room.
      *  @return A look description of this room
      */
     public String getLookDescription()
     {
-        return lookDescription + "\n" + getItemString() + getExitString();
+        return lookDescription + "\n" + getPeopleString() + getItemString() + getExitString();
     }
     
     /**
-     *  Set a detailed description of the room and
-     *  the items in it.
+     *  Set a detailed description of the room.
      */
     public void setLookDescription(String description)
     {
@@ -130,21 +123,45 @@ public class Room
     }
     
     /**
-     * Return a string descripting the items in the room.
+     * Return a string describing the items in the room.
      * Example:     "Items in room: - painting - desk -"
-     * @return Details of the room's items.
+     * @return Details of the room's items or an empty string
+     *      if there are no items
      */
     private String getItemString()
     {
         if(!items.isEmpty()) {
+            // There are items in this room
             String returnString = "Items in room:";
             Set<String> keys = items.keySet();
             for(String itemName : keys) {
                 if(items.get(itemName).isFound()) {
+                    // item has been found by player
                     returnString += " - " + itemName;
                 } else {
                     continue;
                 }
+            }
+            return returnString + " -\n";
+        } else {
+            return "";
+        }
+    }
+    
+    /**
+     * Return a string describing the people in the room..
+     * Example:     "People in room: - Michael Scarn"
+     * @return Detais of the room's people, or empty string
+     *      if there are no NPCs in the room.
+     */
+    private String getPeopleString()
+    {
+        if(!people.isEmpty()) {
+            // There are NPCs in the room
+            String returnString = "People in room:";
+            Set<String> keys = people.keySet();
+            for(String personName : keys) {
+                returnString += " - " + personName;
             }
             return returnString + " -\n";
         } else {
@@ -291,6 +308,8 @@ public class Room
     
     /**
      * Set the blocked status of the room.
+     * @param blocked True if room is to be blocked,
+     *      false otherwise
      */
     public void blocked(boolean blocked)
     {
