@@ -34,6 +34,11 @@ public class Game
             kitchenKnife, drawerKey, toolboxKey, backpack;
     private boolean wantToQuit;
     private boolean win;
+    
+    // Counters that determine game over
+    private int eatCounter;
+    private int timeCounter;
+    private int carcassCounter;
 
     /**
      * Create the game and initialise its internal map, items
@@ -47,6 +52,9 @@ public class Game
         populateItems();
         parser = new Parser();
         gameTitle = "Mansion Detective";
+        eatCounter = 0;
+        timeCounter = 0;
+        carcassCounter = 0;
     }
     
     public static void main (String[] args)
@@ -384,6 +392,7 @@ public class Game
         body.setDetails("A dead -body-. It seems to be Mr. Bodie. His head is caved in and covered in blood.");
         plasticSheet.setDetails("It's a large factory grade -platic sheet- that is wrapped around something. " +
                         "\nYou open the sheet.");
+        nightDrawer.setDetails("An empty -drawer-.");
     }
     
     /**
@@ -440,6 +449,7 @@ public class Game
         upstairs.addItem("table", table);
         upstairs.addItem("vase", vase);
         upstairs.addItem("candle", candle);
+        upstairs.addItem("silver key", fridgeKey);
         
         masterBedroom.addItem("bed", bed);
         masterBedroom.addItem("nightstand", nightstand);
@@ -460,7 +470,6 @@ public class Game
         closet.addItem("clothes", clothes);
         closet.addItem("reading nook", readingNook);
         closet.addItem("book", book);
-        closet.addItem("silver key", fridgeKey);
         closet.addItem("backpack", backpack);
         
         basement.addItem("wooden shelves", woodShelves);
@@ -517,7 +526,7 @@ public class Game
         wait(2000);
         System.out.println("~Thank goodness you're here! I've been stuck in this game forever. " +
                             "\n    I can't figure out how to win. Will you help me?");
-        System.out.println("\nHelp the trapped player? \nyes no");
+        System.out.println("\nHelp the trapped player? \n- yes - no -");
         
         wantToQuit = false;
         win = false;
@@ -534,24 +543,24 @@ public class Game
                             System.out.println("Trapped Player: Whoa pal, you need to use words the game " +
                                                 "will recognize.\n");
                             wait(1000);
-                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \n- yes - no -");
                             break;
                         case 2:
                             System.out.println("Trapped Player: Buddy, you gotta work with me here. Type yes or no." +
                                                 "\n    But preferably yes.\n");
                             wait(1000);
-                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \n- yes - no -");
                             break;
                         case 3:
                             System.out.println("Trapped Player: Now come on, just type y e s, you can do it!\n");
                             wait(2000);
-                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \n- yes - no -");
                             break;
                         case 4:
                             System.out.println("Trapped Player: You know what buddy, don't worry about it." +
                                             "\n    I got you.\n");
                             wait(2500);
-                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \n- yes - no -");
                             System.out.print("> ");
                             wait(1000);
                             System.out.print("y");
@@ -578,13 +587,13 @@ public class Game
                             System.out.println("Trapped Player: Wait man, are you sure? I could " +
                                                 "really use a hand.\n");
                             wait(2000);
-                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \n- yes - no -");
                             break;
                         case 2:
                             System.out.println("Trapped Player: Is there anything I can I say something to change " +
                                                "your mind?\n");
                             wait(2000); 
-                            System.out.println("Help the trapped player? \nyes no");
+                            System.out.println("Help the trapped player? \n- yes - no -");
                             break;
                         case 3:
                             System.out.println("Trapped Player: That's alright, I'll help you instead!");
@@ -601,14 +610,14 @@ public class Game
                         wantToQuit = true;
                         break;
                     } else {
-                        System.out.println("Help the trapped player? \nyes no");
+                        System.out.println("Help the trapped player? \n- yes - no -");
                         break;
                     }
                     
                 default:
                     System.out.println("Trapped Player: You're getting ahead of yourself, there. Before that, " +
                                         "\n\twill you help me?\n");
-                    System.out.println("Help the trapped player? \nyes no");
+                    System.out.println("Help the trapped player? \n- yes - no -");
                     break;
             }
         }
@@ -633,7 +642,7 @@ public class Game
                            "\n    body in order to beat the game. I haven't been able to do either, and my quit command " +
                            "\n    is broken, hence why I'm stuck here.\n");
         wait(7000);
-        System.out.println(player.getCurrentRoom().getLongDescription());
+        System.out.println(player.getCurrentRoom().getLookDescription());
         
         // Enter the main command loop. Here we repeatedly read commands and 
         // execute them until the game is over.
@@ -768,10 +777,12 @@ public class Game
     {
         System.out.println("\nYou are a detective trying to gather evidence for a murder case.");
         System.out.println("Find the murder weapon and the body.");
+        wait(500);
         printCommands();
         System.out.println("Interactable item names are enclosed in dashes. Example: - old picture -");
         System.out.println("You must enter all words in the dashes to successfully interact with the environment.");
         System.out.println();
+        wait(500);
         System.out.println(player.getCurrentRoom().getLongDescription());
     }
     
@@ -788,10 +799,11 @@ public class Game
         System.out.println("take key - to take an item");
         System.out.println("give mike book - to give an item to someone");
         System.out.println("examine floor - to get more details about an item");
-        System.out.println("go kitchen - to go to new room");
+        System.out.println("go kitchen - to go through an exit");
         System.out.println("use pen - to use item");
         System.out.println("drop large book - to drop an item");
         System.out.println("talk joe - to talk to someone");
+        System.out.println("look - to see what room you're in, its items and exits");
         System.out.println("___________________________\n");
         System.out.println(player.getCurrentRoom().getLongDescription());
     }
@@ -893,9 +905,7 @@ public class Game
         //TODO the actual use part
         Item item = player.getItem(itemName);
         Room room = player.getCurrentRoom();
-        int eatCounter = 0;
-        int timeCounter = 0;
-        int carcassCounter = 0;
+        
         switch(itemName) {
             case "pot":
                 if(room != kitchen) {
@@ -994,6 +1004,7 @@ public class Game
                 if(room != masterBath) {
                     System.out.println("Item is not in the room.");
                 } else {
+                    System.out.println();
                     System.out.println("You draw a bath and start to undress.");
                     System.out.println();
                     wait(500);
@@ -1002,12 +1013,13 @@ public class Game
                                     "outside.\n");
                     } else {
                         System.out.println("Blake: What are you doing! You're not even dirty?! Who just takes a bath " +
-                                    "in a stranger's house?\n");
+                                    "in a stranger's \nhouse?\n");
                     }
+                    wait(1000);
                     System.out.print("."); wait(1000); System.out.print("."); wait(1000); 
                     System.out.print("."); wait(1000); System.out.print("."); wait(1000);
                     System.out.print("."); wait(1000); System.out.print("."); wait(1000);
-                    System.out.print("."); wait(1000); System.out.println(".\n"); wait(1000);
+                    System.out.print("."); wait(1000); System.out.println("."); wait(1000);
                     player.takeBath();
                     timeCounter += 5;
                     if(timeCounter >= 15) {
@@ -1380,6 +1392,7 @@ public class Game
         
         if(person != null) {
             // Person is in the room
+            System.out.println();
             if(player.isDirty()) {
                 // player is dirty and must clean up before talking to anyone
                 System.out.println(personName + ": Ew, you're covered in blood.");
@@ -1390,6 +1403,7 @@ public class Game
                         if(!ruby.isMet()) {
                             System.out.println("Ruby is a young woman currently crouched over a box.");
                             ruby.meet();
+                            wait(500);
                         }
                         if(!ruby.hasItem("steak knife") && !ruby.hasItem("kitchen knife")) {
                             // Item key hasn't been given
@@ -1411,6 +1425,7 @@ public class Game
                         if(!olive.isMet()) {
                             System.out.println("Olive is a middleaged woman with glasses.");
                             olive.meet();
+                            wait(500);
                         }
                         System.out.println("Olive: I was in the main hall when the lights went out, but I could still " +
                                     "see because \nMr. Bodie had lit some candles. Nobody came in or out of that " +
@@ -1422,6 +1437,7 @@ public class Game
                         if(!ash.isMet()) {
                             System.out.println("Ash is a strapping young man.");
                             ash.meet();
+                            wait(500);
                         }
                         if(!ash.hasItem("jewelry box")) {
                             // Item key hasn't been given
@@ -1438,6 +1454,7 @@ public class Game
                         if(!cole.isMet()) {
                             System.out.println("Cole is a young man with what appears to be jam all over his hands.");
                             cole.meet();
+                            wait(500);
                         }
                         if(!cole.hasItem("clothes")) {
                             // Item key hasn't been given
@@ -1450,6 +1467,7 @@ public class Game
                                         "something down there.");
                             // Move the NPC
                             if(cole.getCurrentRoom() != kitchen) {
+                                wait(500);
                                 System.out.println("Cole leaves the room.");
                                 cole.setRoom(kitchen);
                                 room.removePerson("cole", cole);
