@@ -322,6 +322,7 @@ public class Game
         candelabrum.lock();
         bookcase.lock();
         painting.lock();
+        toolbox.lock();
 
         // Assign item details
         coffeeTable.setDetails("It's an ordinary coffee table.");
@@ -337,12 +338,12 @@ public class Game
         sideTable.setDetails("It's an ordinary table with nothing on it.");
         cabinet.setDetails("It's an ordinary cabinet filled with the usual things.");
         toilet.setDetails("It's a toilet.");
-        tiles.setDetails("One of the tiles is slightly lifted comes off easily to reveal a small compartment.");
+        tiles.setDetails("One of the tiles is slightly lifted and comes off easily to reveal a small compartment.");
         closetKey.setDetails("A -bronze key- that is slightly smaller the regular keys.");
         ovens.setDetails("They are regular ovens.");
         cupboards.setDetails("The cupboards are dark color with gold handles.");
         kitchenKnife.setDetails("A stocky -kitchen knife-. Could do some damage.");
-        stovetop.setDetails("It's a regular stovetop with on burner ignited under a pot.");
+        stovetop.setDetails("It's a regular stovetop with on burner ignited under a -pot-.");
         pot.setDetails("A large simmering pot filled with beef stew.");
         crates.setDetails("They're ordinary crates filled with various foods.");
         metalShelves.setDetails("They are ordinary wire shelves.");
@@ -389,7 +390,7 @@ public class Game
         drinkingCart2.setDetails("It's a regular table with some bottles and empty glasses on it.");
         drawerKey.setDetails("A normal -gold key-; smaller than the average key.");
         painting.setDetails("It appears to be a portarait of Mr. Bodie and his spouse.");
-        body.setDetails("A dead -body-. It seems to be Mr. Bodie. His head is caved in and covered in blood.");
+        body.setDetails("A dead body. It seems to be Mr. Bodie. His head is caved in and covered in blood.");
         plasticSheet.setDetails("It's a large factory grade -platic sheet- that is wrapped around something. " +
                         "\nYou open the sheet.");
         nightDrawer.setDetails("An empty -drawer-.");
@@ -558,7 +559,7 @@ public class Game
                             break;
                         case 4:
                             System.out.println("Trapped Player: You know what buddy, don't worry about it." +
-                                            "\n    I got you.\n");
+                                            "\n    I got you...\n");
                             wait(2500);
                             System.out.println("Help the trapped player? \n- yes - no -");
                             System.out.print("> ");
@@ -597,6 +598,7 @@ public class Game
                             break;
                         case 3:
                             System.out.println("Trapped Player: That's alright, I'll help you instead!");
+                            wait(1500);
                             done = true;
                             break;
                     }
@@ -716,9 +718,12 @@ public class Game
         
         //Print out game won message
         if(win) {
+            System.out.println("\n\n\nBlake: you did it!");
             System.out.println("\n\n\n                       You have found the murder weapon and the victim's body!");
             System.out.println("                                             You Win!");
             System.out.println("                                      Thank you for playing!");
+            wait(1500);
+            System.out.println("\n\n\n\n\nBlake: Thanks for the help, man. I couldn't have done it without you.");
         }
     }
 
@@ -755,12 +760,12 @@ public class Game
         System.out.println();
         wait(3000);
         System.out.println("Blake: So apparently, Bodie was having a dinner party when the power in the house suddenly" +
-                           "\n    went out. One of the guests says that she was in the study with Bodie when the lights" +
-                           "\n    shut off and when they came back on, she claims that Bodie just vanished into thin air." +
-                           "\n    She didn't see anything or hear anything, but when she left the study one of the guests" +
-                           "\n    was covered in blood and was screaming about how he'd finally killed Bodie. The guy "+
-                           "\n    was taken into custody, but we haven't found a body or the murder weapon so a " +
-                           "\n    conviction won't stick until we have some evidence.");
+                           "\n    went out. One of the guests, Miriam, says that she was in the study with Bodie when " +
+                           "\n    the lights shut off and when they came back on, she claims that Bodie just vanished " +
+                           "\n    into thin air. She didn't see anything or hear anything, but when she left the study " +
+                           "\n    one of the guests, Marvin, was covered in blood and was screaming about how he'd "+
+                           "\n    finally killed Bodie. The guy was taken into custody, but we haven't found a body or " +
+                           "\n    the murder weapon so a conviction won't stick until we have some evidence.");
         wait(13000);
         System.out.println("Blake: Some of the guests have been staying with Mr. Bodie; something about a vacation, so " +
                            "\n    we should be able to talk to some of them. Let's see if we can't close this case" +
@@ -776,13 +781,13 @@ public class Game
     private void printHelp() 
     {
         System.out.println("\nYou are a detective trying to gather evidence for a murder case.");
-        System.out.println("Find the murder weapon and the body.");
-        wait(500);
+        System.out.println("Find the murder weapon and the body.\n");
+        wait(200);
         printCommands();
         System.out.println("Interactable item names are enclosed in dashes. Example: - old picture -");
         System.out.println("You must enter all words in the dashes to successfully interact with the environment.");
         System.out.println();
-        wait(500);
+        wait(200);
         System.out.println(player.getCurrentRoom().getLongDescription());
     }
     
@@ -791,9 +796,8 @@ public class Game
      */
     private void printCommands()
     {
-        System.out.println("Your command words are:");
+        System.out.println("Your command words are:\n");
         parser.showCommands();
-        System.out.println();
         System.out.println("___________________________");
         System.out.println("Command examples:\n");
         System.out.println("take key - to take an item");
@@ -805,7 +809,6 @@ public class Game
         System.out.println("talk joe - to talk to someone");
         System.out.println("look - to see what room you're in, its items and exits");
         System.out.println("___________________________\n");
-        System.out.println(player.getCurrentRoom().getLongDescription());
     }
 
     /** 
@@ -915,6 +918,7 @@ public class Game
                 } else {
                     System.out.println("You help yourself to a bowl of stew.");
                     System.out.println();
+                    wait(1000);
                     System.out.println("Blake: By all means, treat yourself. It's not like we're busy or anything.");
                     System.out.println();
                     player.eat();
@@ -968,7 +972,7 @@ public class Game
                             System.out.println();
                             wait(3000);
                             System.out.println("Blake: What did I tell you? Now you'll need to take a shower " +
-                                        "before we can do anything\n");
+                                        "before we can talk to anyone.\n");
                             carcassCounter++;
                             break;
                             
@@ -980,12 +984,22 @@ public class Game
                             carcassCounter++;
                             break;
                             
+                        case 3:
+                            player.useCarcass();
+                            System.out.println();
+                            wait(2000);
+                            System.out.println("Blake: Stop that. You're so gross and weird.\n");
+                            carcassCounter++;
+                            break;
+                            
                         default:
-                            if(carcassCounter > 10) {
+                            if(carcassCounter == 5) {
                                 System.out.println("Blake: Great, now you've done it.\n");
-                                wait(1500);
+                                wait(1000);
                                 player.useCarcass();
-                                System.out.println("\nNo one will talk to you because you keep fondling the meat.");
+                                wait(2000);
+                                System.out.println("\nNo one will talk to you, and they kick you out because you " +
+                                            "keep fondling the meat.");
                                 System.out.println("\n\n\n                                          Game Over\n\n\n");
                                 wantToQuit = true;
                                 break;
@@ -993,7 +1007,7 @@ public class Game
                             player.useCarcass();
                             System.out.println();
                             wait(2000);
-                            System.out.println("Blake: Stop that. You're so gross and weird.\n");
+                            System.out.println("Blake: Is this, like, a thing for you?\n");
                             carcassCounter++;
                             break;
                     }
@@ -1007,7 +1021,7 @@ public class Game
                     System.out.println();
                     System.out.println("You draw a bath and start to undress.");
                     System.out.println();
-                    wait(500);
+                    wait(1000);
                     if(player.isDirty()) {
                         System.out.println("Blake: A bath? Really? There's a shower right there. Whatever, I'll be " +
                                     "outside.\n");
@@ -1041,7 +1055,7 @@ public class Game
                 } else {
                     System.out.println("You start the shower.");
                     System.out.println();
-                    wait(500);
+                    wait(1000);
                     if(player.isDirty()) {
                         System.out.println("Blake: Be quick, okay? If you waste too much time, we lose the game.\n");
                     } else {
@@ -1401,7 +1415,7 @@ public class Game
                 switch(personName) {
                     case "ruby":
                         if(!ruby.isMet()) {
-                            System.out.println("Ruby is a young woman currently crouched over a box.");
+                            System.out.println("Ruby is a young woman currently crouched over a box.\n");
                             ruby.meet();
                             wait(500);
                         }
@@ -1417,13 +1431,14 @@ public class Game
                                 System.out.println("Ruby gets up and leaves the room.");
                                 ruby.setRoom(upstairs);
                                 room.removePerson("ruby", ruby);
+                                upstairs.addPerson("ruby", ruby);
                             }
                         }
                         break;
                     
                     case "olive":
                         if(!olive.isMet()) {
-                            System.out.println("Olive is a middleaged woman with glasses.");
+                            System.out.println("Olive is a middleaged woman with glasses.\n");
                             olive.meet();
                             wait(500);
                         }
@@ -1435,7 +1450,7 @@ public class Game
                         
                     case "ash":
                         if(!ash.isMet()) {
-                            System.out.println("Ash is a strapping young man.");
+                            System.out.println("Ash is a strapping young man.\n");
                             ash.meet();
                             wait(500);
                         }
@@ -1452,7 +1467,7 @@ public class Game
                     
                     case "cole":
                         if(!cole.isMet()) {
-                            System.out.println("Cole is a young man with what appears to be jam all over his hands.");
+                            System.out.println("Cole is a young man with what appears to be jam all over his hands.\n");
                             cole.meet();
                             wait(500);
                         }
@@ -1471,6 +1486,7 @@ public class Game
                                 System.out.println("Cole leaves the room.");
                                 cole.setRoom(kitchen);
                                 room.removePerson("cole", cole);
+                                kitchen.addPerson("cole", cole);
                             }
                         }
                         break;
