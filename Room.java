@@ -6,7 +6,7 @@ import java.util.Iterator;
  * Class Room - a room in a text-based game.
  *
  * This class is part of the "Mansion Detective" application. 
- * "Mansion Detective" is a text based murder myster adventure game.  
+ * "Mansion Detective" is a text based murder mystery adventure game.  
  *
  * A "Room" represents one location in the game.  It is 
  * connected to other rooms via exits.  For each existing exit, the room 

@@ -6,7 +6,7 @@ import java.util.Set;
  * Class Person - a character in a text-based game
  * 
  * This class is part of the "Mansion Detective" application. 
- * "Mansion Detective" is a text based murder myster adventure game.
+ * "Mansion Detective" is a text based murder mystery adventure game.
  * 
  * A "Person" represents any character (player or NPC) in the game.
  * They have an inventory that stores item names and their object
@@ -73,8 +73,8 @@ public class Person
                     currentRoom.removeItem(itemName, item);     // remove from room
                     if(item.getContainer() != null) {
                         // Item was in a container
-                        item.getContainer().remove(item);
-                        item.setContainer(null);
+                        item.getContainer().remove(item);       // take item out of its container
+                        item.setContainer(null);                
                     }
                     System.out.println("Item added to inventory.");
                 }
@@ -453,7 +453,7 @@ public class Person
     }
     
     /**
-     * Return current inventory size.
+     * Return current inventory weight.
      */
     public int getInventorySize()
     {

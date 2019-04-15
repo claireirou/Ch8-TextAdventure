@@ -1,6 +1,6 @@
 /**
  * This class is part of the "Mansion Detective" application. 
- * "Mansion Detective" is a text based murder myster adventure game.  
+ * "Mansion Detective" is a text based murder mystery adventure game.  
  *
  * This class holds information about a command that was issued by the user.
  * A command currently consists of up to four parts: a CommandWord and a series of strings

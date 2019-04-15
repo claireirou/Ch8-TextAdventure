@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 /**
  * This class is part of the "Mansion Detective" application. 
- * "Mansion Detective" is a text based murder myster adventure game.  
+ * "Mansion Detective" is a text based murder mystery adventure game.  
  * 
  * This parser reads user input and tries to interpret it as an "Adventure"
  * command. Every time it is called it reads a line from the terminal and

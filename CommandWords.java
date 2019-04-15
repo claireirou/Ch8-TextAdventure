@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 /**
  * This class is part of the "Mansion Detective" application. 
- * "Mansion Detective" is a text based murder myster adventure game. 
+ * "Mansion Detective" is a text based murder mystery adventure game. 
  * 
  * This class holds an enumeration of all command words known to the game.
  * It is used to recognise commands as they are typed in.

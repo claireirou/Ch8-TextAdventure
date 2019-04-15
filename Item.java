@@ -4,7 +4,7 @@ import java.util.ArrayList;
  * Class Item - an item in a text-based game.
  * 
  * This class is part of the "Mansion Detective" application. 
- * "Mansion Detective" is a text based murder myster adventure game. 
+ * "Mansion Detective" is a text based murder mystery adventure game. 
  * 
  * An "Item" represents an object a person can interact with. It has 
  * a weight and can be locked. An item can also have items inside of it.

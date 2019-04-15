@@ -1,6 +1,6 @@
 /**
  *  This class is the main class of the "Mansion Detective" application. 
- *  "Mansion Detective" is a text based murder myster game.  Players need 
+ *  "Mansion Detective" is a text based murder mystery game.  Players need 
  *  to find the body and the murder weapon to win.
  * 
  *  To play this game, create an instance of this class and call the "play"
@@ -20,8 +20,6 @@
 public class Game 
 {
     private Parser parser;
-    private Room currentRoom;
-    private Room previousRoom;
     private String gameTitle;
     private Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, kitchen, freezer, fridge, 
             upstairs, masterBedroom, masterBath, childBedroom, closet, basement, dining, lounge, exit, backyard,
@@ -31,9 +29,9 @@ public class Game
             cabinet, toilet, tiles, ovens, stovetop, pot, cupboards, crates, metalShelves, boxes, carcass,
             table, vase, candle, bed, nightstand, tub, shower, jewelryBox, vanity, rug, floorboard, bunkBed,
             smallDesk, clothes, readingNook, book, woodShelves, mower, diningTable, plateSettings, candelabrum, 
-            cigarBox,drinkingCart2, painting, body, plasticSheet, cardboardBox;
-    private Item canister, toolbox, closetKey, blueprints, hammer, cigars, studyDrawer1, studyDrawer2, 
-            childDrawer, nightDrawer, knife, fridgeKey, kitchenKnife, drawerKey, toolboxKey, backpack;
+            cigarBox,drinkingCart2, painting, body, plasticSheet, cardboardBox, canister, toolbox, closetKey, 
+            blueprints, hammer, cigars, studyDrawer1, studyDrawer2, childDrawer, nightDrawer, knife, fridgeKey, 
+            kitchenKnife, drawerKey, toolboxKey, backpack;
     private boolean wantToQuit;
     private boolean win;
 
