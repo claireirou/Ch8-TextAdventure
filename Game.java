@@ -57,6 +57,10 @@ public class Game
         carcassCounter = 0;
     }
     
+    /**
+     *  Static main method for Game class. Creates a new
+     *  game instance and starts the game.
+     */
     public static void main (String[] args)
     {
         Game game = new Game();
