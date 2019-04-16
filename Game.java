@@ -15,7 +15,7 @@
  * 
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.08.10
- */ 
+ */
 
 public class Game 
 {
