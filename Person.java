@@ -216,6 +216,9 @@ public class Person
     {
         nextRoom = currentRoom.getExit(direction);
         System.out.println();
+        if(direction.equals("gate")) {
+            
+        }
         if (nextRoom == null) {
             // Exit doesn't exist
             System.out.println("You cannot go that way!");

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 /**
  *  This class is the main class of the "Mansion Detective" application. 
  *  "Mansion Detective" is a text based murder mystery game.  Players need 
@@ -15,7 +16,7 @@
  * 
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.08.10
- */ //how about now?
+ */
 
 public class Game 
 {
@@ -24,6 +25,7 @@ public class Game
     private Room hall, hallRight, hallLeft, hallForward, study, library, bathroom, kitchen, freezer, fridge, 
             upstairs, masterBedroom, masterBath, childBedroom, closet, basement, dining, lounge, exit, backyard,
             dummyRoom1, dummyRoom2;
+    private TransportRoom transport;
     private Person player, blake, ruby, olive, ash, cole;
     private Item coffeeTable, desk, bookcase, fireplace, drinkingCart, bookshelves, windowSeat, sideTable, 
             cabinet, toilet, tiles, ovens, stovetop, pot, cupboards, crates, metalShelves, boxes, carcass,
@@ -32,6 +34,7 @@ public class Game
             cigarBox,drinkingCart2, painting, body, plasticSheet, cardboardBox, canister, toolbox, closetKey, 
             blueprints, hammer, cigars, studyDrawer1, studyDrawer2, childDrawer, nightDrawer, knife, fridgeKey, 
             kitchenKnife, drawerKey, toolboxKey, backpack;
+    private ArrayList<Room> teleportRooms;
     private boolean wantToQuit;
     private boolean win;
     
@@ -55,6 +58,7 @@ public class Game
         eatCounter = 0;
         timeCounter = 0;
         carcassCounter = 0;
+        teleportRooms = new ArrayList<Room>();
     }
     
     /**
@@ -95,6 +99,22 @@ public class Game
         backyard = new Room("in the back yard", false);
         dummyRoom1 = new Room("", true);
         dummyRoom2 = new Room(" ", true);
+        transport = new TransportRoom("surprise!", false);
+        
+        teleportRooms.add(hall);
+        teleportRooms.add(study);
+        teleportRooms.add(library);
+        teleportRooms.add(bathroom);
+        teleportRooms.add(kitchen);
+        teleportRooms.add(fridge);
+        teleportRooms.add(dining);
+        teleportRooms.add(lounge);
+        teleportRooms.add(basement);
+        teleportRooms.add(childBedroom);
+        teleportRooms.add(masterBedroom);
+        teleportRooms.add(masterBath);
+        teleportRooms.add(exit);
+        
         
         // initialise room exits
         hall.setExit("left", hallLeft);
@@ -150,7 +170,7 @@ public class Game
         lounge.setExit("main hall", hall);
         
         exit.setExit("front door", hall);
-        exit.setExit("gate", backyard);
+        exit.setExit("gate", transport);
         
         backyard.setExit("cellar door", basement);
         backyard.setExit("gate", exit);
